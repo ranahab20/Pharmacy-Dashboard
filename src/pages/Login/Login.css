@@ -1,0 +1,84 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    min-width: 100%;
+}
+.left-sec{
+    flex: 1;
+    min-width: 50%;
+    background: linear-gradient(270deg, #7095C0 0%, #40C0C1 50%, #7095C0 100%),
+            linear-gradient(252.36deg, #7095C0 0%, #40C0C1 50%, #7095C0 100%),
+            linear-gradient(107.64deg, #7095C0 0%, #40C0C1 50%, #7095C0 100%),
+            linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.left-sec p{
+    font-weight: 400;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 2px;
+}
+.right-sec{
+    flex: 1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.login{
+    height: auto;
+    width: 376px;
+    /* margin-top: 118px;
+    margin-left:172px ; */
+    color: rgba(72, 109, 114, 1);
+}
+.email-sec{
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.pass-sec{
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+input{
+    text-align: right;
+    border-radius: 4px;
+    height: 48px;
+    padding: 24px 16px;
+    border-style: none;
+    background-color: rgba(233, 237, 245, 1);
+}
+.log-title{
+    margin-bottom: 64px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    color: rgba(26, 68, 71, 1);
+}
+.email-sec input{
+    margin-bottom: 8px;
+}
+label{
+    font-weight: 500;
+    font-style: medium;
+    font-size: 16px;
+}
+.log-btn{
+    width: 376px;
+    height: auto;
+    margin:48px 0 24px 0;
+    padding:10px;
+    border-radius: 24px;
+    background-color: rgba(25, 78, 82, 1);
+    color: rgba(255, 255, 255, 1);
+    font-weight: 700;
+    font-size: 16px;
+    border-style: none;
+}
