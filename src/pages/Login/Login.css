@@ -81,4 +81,49 @@ label{
     font-weight: 700;
     font-size: 16px;
     border-style: none;
+    direction: rtl;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.flex-icon{
+    position: relative;
+    width: 100%;
+}
+.flex-icon input{
+    width: 100%;
+    padding-left: 45px; 
+}
+
+.eye-icon{
+    position: absolute;
+    left: 15px;      
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+}
+.log-btn:disabled {
+    background-color: #E5E7EB;
+    color: #9CA3AF;
+    border: 1px solid #D1D5DB;
+    cursor: not-allowed;
+}
+.log-btn:active:not(:disabled){
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 8px rgba(30, 94, 99, 0.2);}
+
+.chevron-icon {
+    position: absolute;
+    left: 108px;
+    margin-top: 5px;
+}
+
+.error {
+    margin-top: 6px;
+    color: #D32F2F;
+    font-size: 13px;
+    font-weight: 400;
+    text-align: right;
 }
