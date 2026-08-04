@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import "./Splash.css";
 
 function Splash() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      // navigate("/login");
+      navigate("login");
     }, 2500);
 
     return () => clearTimeout(timer);
