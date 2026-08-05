@@ -9,52 +9,53 @@ import Categories from "./pages/Categories/Categories";
 import Products from "./pages/Products/Products";
 import Drivers from "./pages/Drivers/Drivers";
 import Customers from "./pages/Customers/Customers";
-import Prescriptions from  "./pages/Prescriptions/Prescriptions";
-import Orders from "./pages/Orders/Orders"
+import Prescriptions from "./pages/Prescriptions/Prescriptions";
+import Orders from "./pages/Orders/Orders";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/Pharmacy",
-      element:<Splash/>,
-    },{
-        path:'/Pharmacy/login',
-        element:<Login/>
-      },
-      {
-        path:"Pharmacy/home",
-        element:<MainLayout/>,
-        children:[
-          {
-             index: true,
-            element: <Home />
+      element: <Splash />,
+    },
+    {
+      path: "/Pharmacy/login",
+      element: <Login />,
+    },
+    {
+      path: "Pharmacy/home",
+      element: <MainLayout />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
         },
         {
-          path:"categories",
-          element:<Categories/>
+          path: "categories",
+          element: <Categories />,
         },
         {
-          path:"products",
-          element:<Products/>
+          path: "products",
+          element: <Products />,
         },
         {
-          path:"orders",
-          element:<Orders/>
+          path: "orders",
+          element: <Orders />,
         },
-         {
-          path:"prescriptions",
-          element:<Prescriptions/>
+        {
+          path: "prescriptions",
+          element: <Prescriptions />,
         },
-         {
-          path:"customers",
-          element:<Customers/>
+        {
+          path: "customers",
+          element: <Customers />,
         },
-         {
-          path:"drivers",
-          element:<Drivers/>
-        }
-      ]
-      }
+        {
+          path: "drivers",
+          element: <Drivers />,
+        },
+      ],
+    },
   ]);
   return <RouterProvider router={router} />;
 }

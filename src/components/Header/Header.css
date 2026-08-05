@@ -7,6 +7,7 @@
     padding: 10px;
     gap: 16px;
     width: 100%;
+    
 }
 .logo-box{
     display: flex;
@@ -15,6 +16,7 @@
     box-shadow:  0 2px 8px rgba(209, 246, 243, 1);
     
 }
+
 .header p{
     text-align: center;
     font-size: 20px;
@@ -23,10 +25,68 @@
     width:250px;
     height: 14px;
 }
-.search{
-    /* width: 900px; */
+.search-box {
+    position: relative;
+    width: 800px;
+    height: 48px;
+    flex-shrink: 0;
 }
-.search-box{
-    width:700px;
+.search {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    padding: 0 55px 0 55px;
+    text-align: right;
+    font-size: 16px;
+    font-weight: 400;
+    box-shadow: 0 2px 8px rgba(209, 246, 243, 1);
+}
+.search-icon {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: rgba(51, 66, 70, 1);
+    z-index: 1;
+    cursor: pointer;
+}
+.delete-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: rgba(51, 66, 70, 1);
+    z-index: 1;
+    cursor: pointer;
+}
+/* Design the notification bell */
+.bell-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 32px;
+    background-color: rgba(244, 247, 251, 1);
+    gap: 10px;
+    cursor: pointer;
     display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.bell{
+    width: 24px;
+    height: 24px;
+}
+
+.bell:hover {
+    color: #40c0c1;
+}
+.search-icon:hover {
+    color: #40c0c1;
+}
+.delete-icon:hover {
+    color: #e05a5a;
 }

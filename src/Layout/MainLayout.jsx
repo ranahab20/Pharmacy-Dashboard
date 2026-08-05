@@ -1,11 +1,14 @@
 import React from "react";
 import Header from "../components/Header/Header";
 import Sidebar from "../components/Sidebar/Sidebar";
+import Home from "../pages/Home/Home";
 import { Outlet } from 'react-router-dom';
+import "./MainLayout.css"
 
 const MainLayout = () => {
   return (
     <>
+
       <Header />
 
       <div className="layout">
@@ -14,6 +17,7 @@ const MainLayout = () => {
           <Outlet />
         </main>
         <Sidebar />
+       
       </div>
     </>
   );
