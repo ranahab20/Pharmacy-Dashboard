@@ -1,0 +1,117 @@
+.products-chart {
+    width: 400px;
+    height: 300px;
+
+    background-color: #ffffff;
+
+    border-radius: 24px;
+
+    padding: 5px 25px ;
+
+
+    box-shadow: 0 2px 8px rgba(209, 246, 243, 1);
+
+    direction: rtl;
+}
+
+
+/* العنوان */
+
+.products-chart h3 {
+    margin: 15px 10px 0 10px;
+
+    color: #2a3f5c;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    text-align: right;
+}
+
+
+/* Donut + قائمة المنتجات */
+
+.chart-content {
+    display: flex;
+    
+    /* align-items: center; */
+
+    justify-content: space-between;
+    
+    direction: ltr;
+
+    
+}
+
+
+/* مساحة الـ Donut */
+
+.donut {
+    width: 52%;
+    height:230px;
+  
+}
+
+
+/* قائمة المنتجات */
+
+.products-legend {
+    width: 40%;
+    margin-top: 30px;
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+    direction: rtl;
+}
+
+
+/* كل منتج */
+
+.legend-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+/* مربع اللون */
+
+.legend-color {
+    width: 12px;
+
+    height: 12px;
+
+    border-radius: 3px;
+
+    flex-shrink: 0;
+}
+
+
+/* اسم المنتج */
+
+.legend-name {
+    color: #2a3f5c;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    flex: 1;
+}
+
+
+/* النسبة */
+
+.legend-value {
+    color: #2a3f5c;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}

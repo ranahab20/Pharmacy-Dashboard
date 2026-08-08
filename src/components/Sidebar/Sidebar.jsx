@@ -10,6 +10,7 @@ import { IoPeople } from "react-icons/io5";
 import { FaCarAlt } from "react-icons/fa";
 import { FaPowerOff } from "react-icons/fa6";
 
+
 const Sidebar = () => {
   return (
     <aside className="sidebar">
