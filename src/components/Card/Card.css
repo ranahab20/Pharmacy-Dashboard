@@ -95,3 +95,29 @@
     color: #2a3f5c;
     line-height: 1.1;
 }
+
+/* desigining categorie cards */
+.ctg-card1{
+       width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(29, 127, 132, 1);
+    color: white;
+    font-size: 14px;
+    flex-shrink: 0; 
+}
+.ctg-card2{
+       width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(25, 78, 82, 1);
+    color: white;
+    font-size: 14px;
+    flex-shrink: 0; 
+}

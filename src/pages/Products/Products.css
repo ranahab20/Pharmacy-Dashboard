@@ -1,0 +1,83 @@
+.prd-div{
+    position: fixed;
+    height: calc(100vh - 90px);
+    width: 900px;
+    top: 80px;
+    left: 10px;
+    background-color: rgba(244, 247, 251, 1);
+    border-radius: 16px;
+    direction: rtl;
+    padding: 10px 12px;
+    overflow-y: auto;
+}
+.prd-header{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    border-bottom: 2px rgba(188, 212, 213, 1) solid;
+}
+.search-prd {
+    position: relative;
+    width: 250px;
+    height: 30px;
+    flex-shrink: 0;
+    margin: 10px;
+}
+.search {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px rgba(188, 212, 213, 1) solid;
+    border-radius: 5px;
+    outline: none;
+    padding: 0 55px 0 55px;
+    text-align: right;
+    font-size: 16px;
+    font-weight: 400;
+    background-color: rgba(255, 255, 255, 1);
+}
+.prd-table {
+    margin: 20px 10px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(209, 246, 243, 1);
+
+    overflow: hidden;
+}
+.prd-table table {
+    width: 100%;
+    border-collapse: collapse;
+    direction: rtl;
+}
+.prd-table thead {
+    background-color: #f4f7fb;
+}
+.prd-table th {
+    padding: 16px 12px;
+    color: #2a3f5c;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: right;
+    border-bottom: 2px solid #dce6ed;
+}
+.prd-table td {
+    padding: 16px 12px;
+    color: #2a3f5c;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: right;
+    border-bottom: 1px solid #edf1f5;
+}
+.prd-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+.prd-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+.prd-table td:first-child {
+    font-weight: 700;
+}
+.prd-table td:last-child {
+    text-align: center;
+}
