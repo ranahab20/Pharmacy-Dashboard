@@ -84,7 +84,7 @@ const Login = () => {
             </div>
             <Button
               type="submit"
-              classname={"log-btn"}
+              className="log-btn"
               disabled={
                 !user.email.trim() || !user.password.trim() || errors.password
               }

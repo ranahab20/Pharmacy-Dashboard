@@ -73,20 +73,14 @@
 .edit-btn,
 .delete-btn {
     border: none;
-
     width: 34px;
     height: 34px;
-
     border-radius: 8px;
-
     cursor: pointer;
-
     margin: 0 4px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     transition: 0.2s ease;
 }
 
@@ -112,4 +106,12 @@
  .ctg-btn{
     background-color: rgba(21, 85, 119, 1);
     border-radius: 10px;
+}
+.save-edit{
+      background-color: #2a3f5c;
+  color: white;
+  border-radius: 4px;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-size: 14px;
 }
