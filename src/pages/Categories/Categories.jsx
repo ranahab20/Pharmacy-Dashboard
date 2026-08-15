@@ -7,45 +7,45 @@ import { GiMedicines } from "react-icons/gi";
 import { BiCategoryAlt } from "react-icons/bi";
 import "./Categories.css";
 
-const initialCategories = [
-  {
-    id: 1,
-    name: "الأدوية",
-    quantity: 656,
-  },
-  {
-    id: 2,
-    name: "تجميل",
-    quantity: 7554,
-  },
-  {
-    id: 3,
-    name: "أطفال",
-    quantity: 34,
-  },
-  {
-    id: 4,
-    name: "عناية بالبشرة",
-    quantity: 425,
-  },
-  {
-    id: 5,
-    name: "فيتامينات ومكملات",
-    quantity: 5,
-  },
-  {
-    id: 6,
-    name: "أجهزة طبية",
-    quantity: 689,
-  },
-];
+// const initialCategories = [
+//   {
+//     id: 1,
+//     name: "الأدوية",
+//     quantity: 656,
+//   },
+//   {
+//     id: 2,
+//     name: "تجميل",
+//     quantity: 7554,
+//   },
+//   {
+//     id: 3,
+//     name: "أطفال",
+//     quantity: 34,
+//   },
+//   {
+//     id: 4,
+//     name: "عناية بالبشرة",
+//     quantity: 425,
+//   },
+//   {
+//     id: 5,
+//     name: "فيتامينات ومكملات",
+//     quantity: 5,
+//   },
+//   {
+//     id: 6,
+//     name: "أجهزة طبية",
+//     quantity: 689,
+//   },
+// ];
 
 const Categories = () => {
   const [categoryName, setCategoryName] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [categories, setCategories] = useState(initialCategories);
-  const [editions,setEditions]=useState({name:"",quantity:0});
-  const[editingId,setEditingId]=useState(null);
+  const [categories, setCategories] = useState([]);
+  const [editions, setEditions] = useState({ name: "", quantity: 0 });
+  const [editingId, setEditingId] = useState(null);
 
   const openForm = () => {
     setShowForm(true);
@@ -55,21 +55,21 @@ const Categories = () => {
     setShowForm(false);
     setCategoryName("");
   };
-  const editCat=(category)=>{
-    setEditingId(category.id)
-    setEditions({name:category.name,quantity:category.quantity})
-  }
+  const editCat = (category) => {
+    setEditingId(category.id);
+    setEditions({ name: category.name, quantity: category.quantity });
+  };
 
-  const saveEdit=(id)=>{
-    setCategories((prevCategories)=>{
-      prevCategories.map((category)=>{
-        if(category.id===id){
-          return{  ...category,
-          name: editions.name,
-          quantity: editions.quantity,
-        }
-        }
-        else{
+  const saveEdit = (id) => {
+    setCategories((prevCategories) => {
+      prevCategories.map((category) => {
+        if (category.id === id) {
+          return {
+            ...category,
+            name: editions.name,
+            quantity: editions.quantity,
+          };
+        } else {
           return category;
         }
       });
@@ -107,8 +107,18 @@ const Categories = () => {
           </Button>
         </div>
         <div className="ctg-card">
-          <Card icon={<BiCategoryAlt />} title="إجمالي التصنيفات"  className='ctg-card1' data='10'/>
-          <Card icon={<GiMedicines />} title="إجمالي المنتجات"  className='ctg-card2'data='245' />
+          <Card
+            icon={<BiCategoryAlt />}
+            title="إجمالي التصنيفات"
+            className="ctg-card1"
+            data="10"
+          />
+          <Card
+            icon={<GiMedicines />}
+            title="إجمالي المنتجات"
+            className="ctg-card2"
+            data="245"
+          />
         </div>
         {showForm && (
           <FormModal
@@ -137,37 +147,48 @@ const Categories = () => {
                 <tr key={category.id}>
                   <td>{category.id}</td>
                   <td>
-                    {editingId===category.id?(<input value={editions.name}
-                                                      onChange={(e)=>setEditions({
-                                                        ...editions,
-                                                        name:e.target.value
-                                                      })
-                                                    }
-                                                    />
-                                                  )
-                    :(category.name)}
-                    </td>
-                  <td>
-                    {editingId===category.id?(
-                      <input type="number"
-                      value={editions.quantity}
-                      onChange={(e)=>
-                        setEditions({
-                          ...editions,
-                          quantity:Number(e.target.value)
-                        })
-                      }  
+                    {editingId === category.id ? (
+                      <input
+                        value={editions.name}
+                        onChange={(e) =>
+                          setEditions({
+                            ...editions,
+                            name: e.target.value,
+                          })
+                        }
                       />
-                      
-                    ):(
-                    category.quantity
+                    ) : (
+                      category.name
                     )}
                   </td>
                   <td>
-                    {editingId===category.id?(<button className="save-edit">حفظ</button>):
-                    (<button className="edit-btn" onClick={()=>editCat(category)}>✏️</button>)
-                    }
-                    
+                    {editingId === category.id ? (
+                      <input
+                        type="number"
+                        value={editions.quantity}
+                        onChange={(e) =>
+                          setEditions({
+                            ...editions,
+                            quantity: Number(e.target.value),
+                          })
+                        }
+                      />
+                    ) : (
+                      category.quantity
+                    )}
+                  </td>
+                  <td>
+                    {editingId === category.id ? (
+                      <button className="save-edit">حفظ</button>
+                    ) : (
+                      <button
+                        className="edit-btn"
+                        onClick={() => editCat(category)}
+                      >
+                        ✏️
+                      </button>
+                    )}
+
                     <button className="delete-btn">🗑️</button>
                   </td>
                 </tr>

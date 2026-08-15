@@ -103,15 +103,16 @@
     background-color: #ffe0e0;
     transform: translateY(-1px);
 }
- .ctg-btn{
+.ctg-btn{
     background-color: rgba(21, 85, 119, 1);
     border-radius: 10px;
+    cursor: pointer;
 }
 .save-edit{
-      background-color: #2a3f5c;
-  color: white;
-  border-radius: 4px;
-  padding: 5px 15px;
-  cursor: pointer;
-  font-size: 14px;
+    background-color: #2a3f5c;
+    color: white;
+    border-radius: 4px;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-size: 14px;
 }
