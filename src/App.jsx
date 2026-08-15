@@ -9,8 +9,8 @@ import Categories from "./pages/Categories/Categories";
 import Products from "./pages/Products/Products";
 import Drivers from "./pages/Drivers/Drivers";
 import Customers from "./pages/Customers/Customers";
-import Prescriptions from "./pages/Prescriptions/Prescriptions";
 import Orders from "./pages/Orders/Orders";
+import Profile from "./pages/Profile/Profile";
 
 function App() {
   const router = createBrowserRouter([
@@ -43,8 +43,8 @@ function App() {
           element: <Orders />,
         },
         {
-          path: "prescriptions",
-          element: <Prescriptions />,
+          path: "profile",
+          element: <Profile />,
         },
         {
           path: "customers",

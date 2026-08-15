@@ -9,7 +9,7 @@ import { LiaPrescriptionBottleSolid } from "react-icons/lia";
 import { IoPeople } from "react-icons/io5";
 import { FaCarAlt } from "react-icons/fa";
 import { FaPowerOff } from "react-icons/fa6";
-
+import { IoPersonOutline } from "react-icons/io5";
 
 const Sidebar = () => {
   return (
@@ -32,16 +32,16 @@ const Sidebar = () => {
           <Link to="/Pharmacy/home/orders">الطلبات</Link>
         </li>
         <li>
-          <LiaPrescriptionBottleSolid />
-          <Link to="/Pharmacy/home/prescriptions">الوصفات الطبية</Link>
-        </li>
-        <li>
           <IoPeople />
           <Link to="/Pharmacy/home/customers">العملاء</Link>
         </li>
         <li>
           <FaCarAlt />
           <Link to="/Pharmacy/home/drivers">مندوبو التوصيل</Link>
+        </li>
+        <li>
+          <IoPersonOutline />
+          <Link to="/Pharmacy/home/profile">الملف الشخصي</Link>
         </li>
         <li className="Logout">
           <FaPowerOff />
