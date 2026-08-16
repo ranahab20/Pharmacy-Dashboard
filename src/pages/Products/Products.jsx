@@ -3,7 +3,10 @@ import { FaSearch } from "react-icons/fa";
 import "./Products.css";
 import Button from "../../components/Button/Button";
 import FormModal from "../../components/FormModal/FormModal";
-import panadol from "../../assets/panadol.png";   
+import panadol from "../../assets/panadol.png";
+import { useNavigate } from "react-router-dom";
+import { IoEyeOutline } from "react-icons/io5";
+
 const initialProducts = [
   {
     id: 1,
@@ -99,6 +102,7 @@ const Products = () => {
   const [showForm, setShowForm] = useState(false);
   const [products, setProducts] = useState(initialProducts);
   const [editingId, setEditingId] = useState(null);
+  const navigate = useNavigate();
   const [editions, setEditions] = useState({
     name: "",
     quantity: 0,
@@ -178,6 +182,9 @@ const Products = () => {
     setProducts((prevProducts) => [...prevProducts, newProduct]);
     closeForm();
   };
+  const viewProduct = (productId) => {
+    navigate(`/products/${productId}`);
+  };
 
   return (
     <div className="prd-div">
@@ -217,6 +224,7 @@ const Products = () => {
               <th>يتطلب وصفة</th>
               <th>الحالة</th>
               <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -250,7 +258,11 @@ const Products = () => {
                       }
                     />
                   ) : (
-                   <img src={product.image} alt={product.name} className="prd-img" />
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="prd-img"
+                    />
                   )}
                 </td>
                 <td>
@@ -325,8 +337,10 @@ const Products = () => {
                         })
                       }
                     />
+                  ) : product.is_requires_prescription ? (
+                    "لا"
                   ) : (
-                    product.is_requires_prescription?"لا":" نعم"
+                    " نعم"
                   )}
                 </td>
                 <td>
@@ -360,6 +374,14 @@ const Products = () => {
                       ✏️
                     </button>
                   )}
+                </td>
+                <td>
+                  <button
+                    className="prd-info"
+                    onClick={viewProduct(product.id)}
+                  >
+                    <IoEyeOutline />
+                  </button>
                 </td>
               </tr>
             ))}

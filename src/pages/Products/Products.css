@@ -58,6 +58,7 @@
 }
 .prd-table thead {
     background-color: #f4f7fb;
+    width: 100%;
 }
 .prd-table th {
     padding: 10px 5px;
@@ -145,5 +146,19 @@
     object-fit: contain;
     display: block;
     margin: auto;
+}
+.prd-info{
+    color:rgb(79, 154, 154) !important;
+    transform: scale(1.5);
+    width: 16px;
+    height: 16px;
+    background-color: rgba(255, 255, 255, 1);
+    border-style: none;
+ }
+.prd-info:hover{
+color: red;
+cursor: pointer;
+transform: scale(2.0);
+background-color: #f4f7fb;
 }
 
