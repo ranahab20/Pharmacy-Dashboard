@@ -11,6 +11,7 @@ import Drivers from "./pages/Drivers/Drivers";
 import Customers from "./pages/Customers/Customers";
 import Orders from "./pages/Orders/Orders";
 import Profile from "./pages/Profile/Profile";
+import ProductDetails from "./pages/ProductDetails/ProductDetails";
 
 function App() {
   const router = createBrowserRouter([
@@ -37,6 +38,10 @@ function App() {
         {
           path: "products",
           element: <Products />,
+        },
+         {
+          path: "products/:productId",
+          element: <ProductDetails />,
         },
         {
           path: "orders",

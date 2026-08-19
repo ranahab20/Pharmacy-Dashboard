@@ -1,0 +1,24 @@
+.prd-details-div{
+    position: fixed;
+    height: calc(100vh - 90px);
+    width: 900px;
+    top: 80px;
+    left: 10px;
+    background-color: rgba(244, 247, 251, 1);
+    border-radius: 16px;
+    direction: rtl;
+    padding: 10px 12px;
+    overflow-y: auto;
+}
+.prd-details-header{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    border-bottom: 2px rgba(188, 212, 213, 1) solid;
+    font-size: 20px;
+    font-weight: 700;
+}
+.prd-summary-card{
+    display: flex;
+
+}

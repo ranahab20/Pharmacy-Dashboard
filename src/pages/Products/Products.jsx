@@ -183,7 +183,7 @@ const Products = () => {
     closeForm();
   };
   const viewProduct = (productId) => {
-    navigate(`/products/${productId}`);
+    navigate(`/Pharmacy/home/products/${productId}`);
   };
 
   return (
@@ -378,7 +378,7 @@ const Products = () => {
                 <td>
                   <button
                     className="prd-info"
-                    onClick={viewProduct(product.id)}
+                    onClick={() => viewProduct(product.id)}
                   >
                     <IoEyeOutline />
                   </button>
