@@ -61,21 +61,22 @@ const Categories = () => {
   };
 
   const saveEdit = (id) => {
-    setCategories((prevCategories) => {
-      prevCategories.map((category) => {
-        if (category.id === id) {
-          return {
-            ...category,
-            name: editions.name,
-            quantity: editions.quantity,
-          };
-        } else {
-          return category;
-        }
-      });
-    });
-    setEditingId(null);
-  };
+  setCategories((prevCategories) =>
+    prevCategories.map((category) => {
+      if (category.id === id) {
+        return {
+          ...category,
+          name: editions.name,
+          quantity: editions.quantity,
+        };
+      }
+
+      return category;
+    })
+  );
+
+  setEditingId(null);
+};
 
   const addCategory = () => {
     if (!categoryName.trim()) {
@@ -179,7 +180,7 @@ const Categories = () => {
                   </td>
                   <td>
                     {editingId === category.id ? (
-                      <button className="save-edit">حفظ</button>
+                      <button className="save-edit" onClick={()=>saveEdit(category.id)}>حفظ</button>
                     ) : (
                       <button
                         className="edit-btn"

@@ -7,6 +7,7 @@ import panadol from "../../assets/panadol.png";
 import { useNavigate } from "react-router-dom";
 import { IoEyeOutline } from "react-icons/io5";
 
+
 const initialProducts = [
   {
     id: 1,
@@ -114,13 +115,17 @@ const Products = () => {
     description: "",
   });
 
-  const openForm = () => {
-    setShowForm(true);
+  // const openForm = () => {
+  //   setShowForm(true);
+  // };
+  // const closeForm = () => {
+  //   setShowForm(false);
+  //   setProductName("");
+  // };
+  const AddHandler = () => {
+    navigate('/Pharmacy/home/addProduct');
   };
-  const closeForm = () => {
-    setShowForm(false);
-    setProductName("");
-  };
+
   const editprod = (product) => {
     setEditingId(product.id);
     setEditions({
@@ -190,7 +195,7 @@ const Products = () => {
     <div className="prd-div">
       <div className="prd-header">
         المنتجات
-        <Button className="ctg-btn" onClick={openForm}>
+        <Button className="ctg-btn" onClick={AddHandler}>
           منتج جديد +
         </Button>
       </div>
@@ -198,17 +203,7 @@ const Products = () => {
         <input type="text" placeholder="بحث عن .." className="search" />
       </div>
 
-      {showForm && (
-        <FormModal
-          title="إضافة منتج جديد"
-          label="اسم المنتج"
-          placeholder="أدخل اسم المنتج"
-          value={product_name}
-          onChange={(e) => setProductName(e.target.value)}
-          onSubmit={addProduct}
-          onClose={closeForm}
-        />
-      )}
+     
 
       <div className="prd-table">
         <table>

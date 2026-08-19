@@ -12,6 +12,7 @@ import Customers from "./pages/Customers/Customers";
 import Orders from "./pages/Orders/Orders";
 import Profile from "./pages/Profile/Profile";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
+import AddProduct from "./pages/AddProduct/AddProduct";
 
 function App() {
   const router = createBrowserRouter([
@@ -42,6 +43,10 @@ function App() {
          {
           path: "products/:productId",
           element: <ProductDetails />,
+        },
+        {
+          path: "addProduct/",
+          element: <AddProduct />,
         },
         {
           path: "orders",
