@@ -1,6 +1,6 @@
-import React from 'react';
-import'./Orders.css'
-import { useState } from 'react';
+import React from "react";
+import "./Orders.css";
+import { useState } from "react";
 import { IoEyeOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
@@ -79,60 +79,59 @@ const initialOrders = [
   },
 ];
 const Orders = () => {
-    const [orders, setOrders] = useState(initialOrders);
-    const navigate = useNavigate();
-    const viewOrder=(orderId)=>{
-    navigate(`/orders/${orderId}`);
-    }
-  
-  return (
-  <>
-    <div className="ord-div">
-      <div className="ord-header">
-        كل الطلبات
-      </div>  
-      <div className="search-ord">
-        <input type="text" placeholder="بحث عن .." className="search" />
-      </div>
-      <div className="ord-table">
-        <table>
-          <thead>
-            <tr>
-              <th>رقم الطلب</th>
-              <th>العميل</th>
-              <th>تاريخ الطلب</th>
-              <th>تاريخ الاكتمال</th>
-              <th>المبلغ</th>
-              <th>الحالة</th>
-              <th>عامل التوصيل</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.id}>
-            <td>{order.id}</td>
-            <td>{order.customer}</td>
-            <td>{order.orderDate}</td>
-            <td>{order.completionDate}</td>
-            <td>{order.amount}</td>
-            <td className='ord-status'>{order.status}</td>
-            <td>{order.deliveryAgent}</td>
-            <td className=''> 
-                <button
-                className='ord-info'
-                onClick={viewOrder(order.id)}><IoEyeOutline /></button>
-                
-              </td>
-            </tr>
-            ))}
-            </tbody>
-</table>
-      
-    </div> 
-   </div>
-  </>
-  )
-}
+  const [orders, setOrders] = useState(initialOrders);
+  const navigate = useNavigate();
+  const viewOrder = (orderId) => {
+    navigate(`/Pharmacy/home/orders/${orderId}`);
+  };
 
-export default Orders
+  return (
+    <>
+      <div className="ord-div">
+        <div className="ord-header">كل الطلبات</div>
+        <div className="search-ord">
+          <input type="text" placeholder="بحث عن .." className="search" />
+        </div>
+        <div className="ord-table">
+          <table>
+            <thead>
+              <tr>
+                <th>رقم الطلب</th>
+                <th>العميل</th>
+                <th>تاريخ الطلب</th>
+                <th>تاريخ الاكتمال</th>
+                <th>المبلغ</th>
+                <th>الحالة</th>
+                <th>عامل التوصيل</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order) => (
+                <tr key={order.id}>
+                  <td>{order.id}</td>
+                  <td>{order.customer}</td>
+                  <td>{order.orderDate}</td>
+                  <td>{order.completionDate}</td>
+                  <td>{order.amount}</td>
+                  <td className="ord-status">{order.status}</td>
+                  <td>{order.deliveryAgent}</td>
+                  <td className="">
+                    <button
+                      className="ord-info"
+                      onClick={() => viewOrder(order.id)}
+                    >
+                      <IoEyeOutline />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Orders;

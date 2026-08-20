@@ -13,6 +13,7 @@ import Orders from "./pages/Orders/Orders";
 import Profile from "./pages/Profile/Profile";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import AddProduct from "./pages/AddProduct/AddProduct";
+import OrderDetails from "./pages/OrderDetails/OrderDetails";
 
 function App() {
   const router = createBrowserRouter([
@@ -51,6 +52,10 @@ function App() {
         {
           path: "orders",
           element: <Orders />,
+        },
+        {
+          path: "orders/:orderId",
+          element: <OrderDetails />,
         },
         {
           path: "profile",
