@@ -1,9 +1,22 @@
-.ctg-btn{
-    background-color: rgba(21, 85, 119, 1);
-    border-radius: 10px;
-    color:aliceblue;
-    border:none;
-    padding: 2px;
+
+ .ctg-btn{
+ display: inline-flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; 
+  padding: 8px 16px;
+  background-color: rgba(21, 85, 119, 1);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  .ctg-btn:hover {
+  background-color: #1e2e44;
 }
 .log-btn{
     width: 376px;
@@ -21,4 +34,45 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.upload-btn {
+  width: 100%;
+  margin-top: 1.25rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.upload-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.upload-btn:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+ .back-Prd-btn {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; 
+  padding: 8px 16px;
+  background-color: rgba(21, 85, 119, 1);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  direction: rtl;
+}
+.back-Prd-btn:hover {
+  background-color: #1e2e44;
 }

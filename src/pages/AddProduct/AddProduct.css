@@ -75,12 +75,6 @@ position: fixed;
     padding-bottom: 12px;
 }
 
-.basic-info-add-prd label {
-    color: #2a3f5c;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
 .basic-info-add-prd input {
     width: 100%;
     max-width: 350px;
@@ -156,4 +150,29 @@ position: fixed;
     padding: 20px;
     box-shadow: 0 2px 8px rgba(209, 246, 243, 1);
 }
-
+.description-add-prd p{
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    color: rgba(9, 38, 42, 1);
+}
+.flex-desc-add-prd{
+    display: flex;
+    flex-direction: column;
+}
+label{
+    color: rgba(72, 109, 114, 1);
+    font-weight: 500;
+    font-size: 16px;
+}
+input::placeholder {
+color: rgba(78, 120, 169, 1); 
+font-weight: 500;
+font-size: 14px;
+}
+.chevron-icon-back {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
