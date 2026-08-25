@@ -1,0 +1,9 @@
+.add-driver-div{
+    grid-column: 1;
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(209, 246, 243, 1);
+    display: flex;
+    flex-direction: column;
+}

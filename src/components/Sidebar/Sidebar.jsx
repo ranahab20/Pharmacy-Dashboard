@@ -1,51 +1,120 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 import { BiCategoryAlt } from "react-icons/bi";
 import { RiHome3Line } from "react-icons/ri";
 import { GiMedicines } from "react-icons/gi";
 import { TbChecklist } from "react-icons/tb";
-import { LiaPrescriptionBottleSolid } from "react-icons/lia";
 import { IoPeople } from "react-icons/io5";
 import { FaCarAlt } from "react-icons/fa";
 import { FaPowerOff } from "react-icons/fa6";
 import { IoPersonOutline } from "react-icons/io5";
 
 const Sidebar = () => {
+  const { pathname } = useLocation();
+
   return (
     <aside className="sidebar">
       <ul className="sidebar-list">
         <li>
-          <RiHome3Line />
-          <Link to="/Pharmacy/home">الرئيسية</Link>
+          <Link
+            to="/Pharmacy/home"
+            className={`nav-link ${
+              pathname === "/Pharmacy/home" ? "active" : ""
+            }`}
+          >
+            <RiHome3Line />
+            <span>الرئيسية</span>
+          </Link>
         </li>
+
         <li>
-          <BiCategoryAlt />
-          <Link to="/Pharmacy/home/categories" >التصنيفات</Link>
+          <Link
+            to="/Pharmacy/home/categories"
+            className={`nav-link ${
+              pathname === "/Pharmacy/home/categories" ? "active" : ""
+            }`}
+          >
+            <BiCategoryAlt />
+            <span>التصنيفات</span>
+          </Link>
         </li>
+
         <li>
-          <GiMedicines />
-          <Link to="/Pharmacy/home/products">المنتجات</Link>
+          <Link
+            to="/Pharmacy/home/products"
+            className={`nav-link ${
+              pathname.startsWith("/Pharmacy/home/products") ||
+              pathname === "/Pharmacy/home/addProduct"
+                ? "active"
+                : ""
+            }`}
+          >
+            <GiMedicines />
+            <span>المنتجات</span>
+          </Link>
         </li>
+
         <li>
-          <TbChecklist />
-          <Link to="/Pharmacy/home/orders">الطلبات</Link>
+          <Link
+            to="/Pharmacy/home/orders"
+            className={`nav-link ${
+              pathname.startsWith("/Pharmacy/home/orders") ||
+              pathname === "/Pharmacy/home/orderDetails"
+                ? "active"
+                : ""
+            }`}
+          >
+            <TbChecklist />
+            <span>الطلبات</span>
+          </Link>
         </li>
+
         <li>
-          <IoPeople />
-          <Link to="/Pharmacy/home/customers">العملاء</Link>
+          <Link
+            to="/Pharmacy/home/customers"
+            className={`nav-link ${
+              pathname === "/Pharmacy/home/customers" ? "active" : ""
+            }`}
+          >
+            <IoPeople />
+            <span>العملاء</span>
+          </Link>
         </li>
+
         <li>
-          <FaCarAlt />
-          <Link to="/Pharmacy/home/drivers">مندوبو التوصيل</Link>
+          <Link
+            to="/Pharmacy/home/drivers"
+            className={`nav-link ${
+              pathname.startsWith("/Pharmacy/home/drivers") ||  pathname === "/Pharmacy/home/AddDriver"  ? "active" : ""
+            }`}
+          >
+            <FaCarAlt />
+            <span>مندوبو التوصيل</span>
+          </Link>
         </li>
+
         <li>
-          <IoPersonOutline />
-          <Link to="/Pharmacy/home/profile">الملف الشخصي</Link>
+          <Link
+            to="/Pharmacy/home/profile"
+            className={`nav-link ${
+              pathname === "/Pharmacy/home/profile" ? "active" : ""
+            }`}
+          >
+            <IoPersonOutline />
+            <span>الملف الشخصي</span>
+          </Link>
         </li>
+
         <li className="Logout">
-          <FaPowerOff />
-          <Link to="/Pharmacy/login">تسجيل الخروج</Link>
+          <Link
+            to="/Pharmacy/login"
+            className={`nav-link ${
+              pathname === "/Pharmacy/login" ? "active" : ""
+            }`}
+          >
+            <FaPowerOff />
+            <span>تسجيل الخروج</span>
+          </Link>
         </li>
       </ul>
     </aside>

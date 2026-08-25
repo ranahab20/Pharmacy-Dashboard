@@ -52,6 +52,7 @@ const AddProduct = () => {
             عودة للمنتجات
           </Button>
         </div>
+        <form onSubmit={submitHandler}>
         <div className="info-add-prd">
           <div className="basic-info-add-prd">
             <h4>معلومات اساسية: ⓘ </h4>
@@ -164,13 +165,16 @@ const AddProduct = () => {
             </div>
           </div>
         </div>
-        <Button type='submit'onSubmit={submitHandler} className="save-new-prd">
+         </form>
+        <Button type='submit' className="save-new-prd">
           إضافة المنتج
         </Button>
         <Button type='button' onClick={cancelHandler} className="cancel-new-prd">
           إلغاء
         </Button>
+       
       </div>
+
     </>
   );
 };

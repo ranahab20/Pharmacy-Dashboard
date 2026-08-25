@@ -81,8 +81,8 @@ const initialOrders = [
 const Orders = () => {
   const [orders, setOrders] = useState(initialOrders);
   const navigate = useNavigate();
-  const viewOrder = (orderId) => {
-    navigate(`/Pharmacy/home/orders/${orderId}`);
+  const viewOrder = (order_id) => {
+    navigate(`/Pharmacy/home/orders/${order_id}`);
   };
 
   return (

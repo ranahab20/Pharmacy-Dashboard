@@ -121,3 +121,40 @@
     font-size: 14px;
     flex-shrink: 0; 
 }
+/* design customers cards */
+.ctm-card1{
+       width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(20, 103, 46, 1);
+    color: white;
+    font-size: 14px;
+    flex-shrink: 0;  
+}
+.ctm-card2{
+       width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(177, 3, 27, 1);
+    color: white;
+    font-size: 14px;
+    flex-shrink: 0;  
+}
+.ctm-card3{
+       width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(42, 63, 92, 1);
+    color: white;
+    font-size: 14px;
+    flex-shrink: 0;  
+}

@@ -14,6 +14,7 @@ import Profile from "./pages/Profile/Profile";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import AddProduct from "./pages/AddProduct/AddProduct";
 import OrderDetails from "./pages/OrderDetails/OrderDetails";
+import AddDriver from "./pages/AddDriver/AddDriver";
 
 function App() {
   const router = createBrowserRouter([
@@ -54,7 +55,7 @@ function App() {
           element: <Orders />,
         },
         {
-          path: "orders/:orderId",
+          path: "orders/:order_id",
           element: <OrderDetails />,
         },
         {
@@ -68,6 +69,10 @@ function App() {
         {
           path: "drivers",
           element: <Drivers />,
+        },
+         {
+          path: "addDriver/",
+          element: <AddDriver />,
         },
       ],
     },
