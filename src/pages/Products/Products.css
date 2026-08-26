@@ -1,164 +1,578 @@
-.prd-div{
-    position: fixed;
-    height: calc(100vh - 90px);
-    width: 900px;
-    top: 80px;
-    left: 10px;
-    background-color: rgba(244, 247, 251, 1);
-    border-radius: 16px;
-    direction: rtl;
-    padding: 10px 12px;
-    overflow-y: auto;
+/* =========================================
+   Products Page
+========================================= */
+
+.prd-div {
+  width: 100%;
+  min-width: 0;
+
+  min-height: calc(100vh - 90px);
+
+  background-color: #f4f7fb;
+
+  border-radius: 16px;
+
+  direction: rtl;
+
+  padding: 10px 12px;
 }
-.prd-header{
-    display: flex;
-    justify-content: space-between;
-    padding: 5px;
-    border-bottom: 2px rgba(188, 212, 213, 1) solid;
-    font-size: 20px;
-    font-weight: 700;
+
+
+/* =========================================
+   Header
+========================================= */
+
+.prd-header {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 8px 5px;
+
+  border-bottom: 2px solid rgba(188, 212, 213, 1);
+
+  font-size: 20px;
+
+  font-weight: 700;
 }
+
+.prd-header h3 {
+  margin: 0;
+
+  font-size: 20px;
+}
+
+
+/* =========================================
+   Search
+========================================= */
+
 .search-prd {
-    position: relative;
-    width: 250px;
-    height: 30px;
-    flex-shrink: 0;
-    margin: 10px;
+  position: relative;
+
+  width: 100%;
+  max-width: 350px;
+
+  margin: 15px 0;
 }
-.search {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    border: 1px rgba(188, 212, 213, 1) solid;
-    border-radius: 5px;
-    outline: none;
-    padding: 0 55px 0 55px;
-    text-align: right;
-    font-size: 16px;
-    font-weight: 400;
-    background-color: rgba(255, 255, 255, 1);
+
+.product-search-input {
+  width: 100%;
+  height: 40px;
+
+  border: 1px solid rgba(188, 212, 213, 1);
+
+  border-radius: 7px;
+
+  outline: none;
+
+  padding: 0 42px 0 15px;
+
+  text-align: right;
+
+  font-size: 14px;
+
+  background-color: white;
 }
+
+.product-search-input:focus {
+  border-color: #40c0c1;
+}
+
+.product-search-icon {
+  position: absolute;
+
+  right: 14px;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #596b7d;
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   Table Container
+========================================= */
+
 .prd-table {
-    margin: 20px 10px;
-    background-color: #ffffff;
-    border-radius: 16px;
-    padding: 10px;
-    box-shadow: 0 2px 8px rgba(209, 246, 243, 1);
+  width: 100%;
 
-    overflow-x: auto;
-    overflow-y: hidden;
-    
+  margin-top: 15px;
+
+  background-color: white;
+
+  border-radius: 16px;
+
+  padding: 10px;
+
+  box-shadow: 0 2px 8px rgba(209, 246, 243, 1);
+
+  overflow-x: auto;
 }
+
+
+/* =========================================
+   Table
+========================================= */
+
 .prd-table table {
-    width: 100%;
-    border-collapse: collapse;
-    direction: rtl;
-    table-layout: fixed;
+  width: 100%;
 
+  min-width: 1100px;
+
+  border-collapse: collapse;
+
+  direction: rtl;
+
+  table-layout: auto;
 }
+
 .prd-table thead {
-    background-color: #f4f7fb;
-    width: 100%;
+  background-color: #f4f7fb;
 }
+
 .prd-table th {
-    padding: 10px 5px;
-    color: #2a3f5c;
-    font-size: 13px;
-    font-weight: 700;
-    text-align: right;
-    border-bottom: 2px solid #dce6ed;
+  padding: 12px 8px;
+
+  color: #2a3f5c;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  text-align: right;
+
+  white-space: nowrap;
+
+  border-bottom: 2px solid #dce6ed;
 }
+
 .prd-table td {
-    padding: 10px 5px;
-    color: #2a3f5c;
-    font-size: 12px;
-    font-weight: 500;
-    text-align: right;
-    border-bottom: 1px solid #edf1f5;
+  padding: 10px 8px;
+
+  color: #2a3f5c;
+
+  font-size: 12px;
+
+  font-weight: 500;
+
+  text-align: right;
+
+  vertical-align: middle;
+
+  border-bottom: 1px solid #edf1f5;
 }
+
 .prd-table tbody tr {
-    transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease;
 }
+
 .prd-table tbody tr:hover {
-    background-color: #f8fafc;
+  background-color: #f8fafc;
 }
-.prd-table td:first-child {
-    font-weight: 700;
-}
-.prd-table td:last-child {
-    text-align: center;
-}
-.prd-table input{
-    width:100%;
-}
+
+
+/* =========================================
+   Columns
+========================================= */
+
 .prd-table th:nth-child(1),
 .prd-table td:nth-child(1) {
-    width: 60px;
+  width: 70px;
 }
 
 .prd-table th:nth-child(2),
 .prd-table td:nth-child(2) {
-    min-width: 150px;
+  min-width: 150px;
 }
 
 .prd-table th:nth-child(3),
 .prd-table td:nth-child(3) {
-    min-width: 140px;
+  min-width: 110px;
+  text-align: center;
 }
 
 .prd-table th:nth-child(4),
 .prd-table td:nth-child(4) {
-    min-width: 130px;
+  min-width: 130px;
 }
 
 .prd-table th:nth-child(5),
 .prd-table td:nth-child(5) {
-    min-width: 200px;
+  min-width: 200px;
 }
 
 .prd-table th:nth-child(6),
 .prd-table td:nth-child(6) {
-    min-width: 100px;
+  min-width: 100px;
 }
 
 .prd-table th:nth-child(7),
 .prd-table td:nth-child(7) {
-    min-width: 90px;
+  min-width: 90px;
 }
 
 .prd-table th:nth-child(8),
 .prd-table td:nth-child(8) {
-    min-width: 100px;
+  min-width: 120px;
 }
 
 .prd-table th:nth-child(9),
 .prd-table td:nth-child(9) {
-    min-width: 100px;
+  min-width: 120px;
 }
 
 .prd-table th:nth-child(10),
 .prd-table td:nth-child(10) {
-    min-width: 80px;
-}
-.prd-img{
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
-    display: block;
-    margin: auto;
-}
-.prd-info{
-    color:rgb(79, 154, 154) !important;
-    transform: scale(1.5);
-    width: 16px;
-    height: 16px;
-    background-color: rgba(255, 255, 255, 1);
-    border-style: none;
- }
-.prd-info:hover{
-color: red;
-cursor: pointer;
-transform: scale(2.0);
-background-color: #f4f7fb;
+  min-width: 100px;
+  text-align: center;
 }
 
+.prd-table th:nth-child(11),
+.prd-table td:nth-child(11) {
+  min-width: 80px;
+  text-align: center;
+}
+
+
+/* =========================================
+   Product Image
+========================================= */
+
+.prd-img {
+  width: 55px;
+  height: 55px;
+
+  object-fit: contain;
+
+  display: block;
+
+  margin: auto;
+
+  border-radius: 6px;
+}
+
+
+/* =========================================
+   Edit Inputs
+========================================= */
+
+.edit-input {
+  width: 100%;
+
+  min-width: 90px;
+
+  padding: 7px 8px;
+
+  border: 1px solid #d5dde5;
+
+  border-radius: 6px;
+
+  outline: none;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  background-color: white;
+}
+
+.edit-input:focus {
+  border-color: #40c0c1;
+}
+
+.edit-description {
+  min-width: 180px;
+
+  min-height: 60px;
+
+  resize: vertical;
+}
+
+
+/* =========================================
+   Image Editing
+========================================= */
+
+.edit-image-container {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.change-image-btn {
+  padding: 5px 8px;
+
+  border-radius: 5px;
+
+  background-color: #eef4f8;
+
+  font-size: 11px;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+}
+
+.change-image-btn:hover {
+  background-color: #dfecef;
+}
+
+
+/* =========================================
+   Checkbox
+========================================= */
+
+.checkbox-edit {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  white-space: nowrap;
+}
+
+.checkbox-edit input {
+  width: auto;
+}
+
+
+/* =========================================
+   Edit Buttons
+========================================= */
+
+.edit-actions {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 5px;
+}
+
+.save-edit,
+.cancel-edit {
+  width: 65px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  padding: 6px 8px;
+
+  cursor: pointer;
+
+  font-size: 12px;
+}
+
+.save-edit {
+  background-color: #40c0c1;
+
+  color: white;
+}
+
+.save-edit:hover {
+  background-color: #32a8a9;
+}
+
+.cancel-edit {
+  background-color: #eceff3;
+
+  color: #39495a;
+}
+
+.cancel-edit:hover {
+  background-color: #dde2e7;
+}
+
+
+/* =========================================
+   Edit Button
+========================================= */
+
+.edit-btn {
+  border: none;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  font-size: 17px;
+}
+
+
+/* =========================================
+   Product Details Button
+========================================= */
+
+.prd-info {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  margin: auto;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background-color: transparent;
+
+  color: rgb(79, 154, 154);
+
+  font-size: 20px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.prd-info:hover {
+  color: red;
+
+  background-color: #f4f7fb;
+
+  transform: scale(1.1);
+}
+
+
+/* =========================================
+   Empty Products
+========================================= */
+
+.no-products {
+  text-align: center !important;
+
+  padding: 30px !important;
+
+  color: #777 !important;
+}
+
+
+/* =========================================
+   Tablet
+========================================= */
+
+@media (max-width: 1100px) {
+
+  .prd-div {
+    padding: 10px;
+  }
+
+  .prd-header {
+    font-size: 18px;
+  }
+
+  .prd-header h3 {
+    font-size: 18px;
+  }
+
+  .search-prd {
+    max-width: 300px;
+  }
+}
+
+
+/* =========================================
+   Mobile
+========================================= */
+
+@media (max-width: 768px) {
+
+  .prd-div {
+    width: 100%;
+
+    padding: 8px;
+  }
+
+  .prd-header {
+    gap: 10px;
+  }
+
+  .prd-header h3 {
+    font-size: 17px;
+  }
+
+  .search-prd {
+    width: 100%;
+
+    max-width: none;
+
+    margin: 12px 0;
+  }
+
+  .prd-table {
+    padding: 5px;
+
+    border-radius: 10px;
+  }
+
+  .prd-table table {
+    min-width: 1000px;
+  }
+
+  .prd-table th {
+    font-size: 12px;
+
+    padding: 9px 6px;
+  }
+
+  .prd-table td {
+    font-size: 11px;
+
+    padding: 8px 6px;
+  }
+
+  .prd-img {
+    width: 45px;
+
+    height: 45px;
+  }
+}
+
+
+/* =========================================
+   Small Mobile
+========================================= */
+
+@media (max-width: 480px) {
+
+  .prd-header {
+    align-items: center;
+  }
+
+  .prd-header h3 {
+    font-size: 16px;
+  }
+
+  .product-search-input {
+    height: 38px;
+
+    font-size: 13px;
+  }
+
+  .prd-table {
+    margin-top: 10px;
+  }
+}

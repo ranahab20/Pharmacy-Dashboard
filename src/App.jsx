@@ -10,7 +10,6 @@ import Products from "./pages/Products/Products";
 import Drivers from "./pages/Drivers/Drivers";
 import Customers from "./pages/Customers/Customers";
 import Orders from "./pages/Orders/Orders";
-import Profile from "./pages/Profile/Profile";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import AddProduct from "./pages/AddProduct/AddProduct";
 import OrderDetails from "./pages/OrderDetails/OrderDetails";
@@ -57,10 +56,6 @@ function App() {
         {
           path: "orders/:order_id",
           element: <OrderDetails />,
-        },
-        {
-          path: "profile",
-          element: <Profile />,
         },
         {
           path: "customers",

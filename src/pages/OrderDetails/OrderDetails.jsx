@@ -10,27 +10,20 @@ import {
   FaTruck,
   FaPrescriptionBottleAlt,
 } from "react-icons/fa";
-
-import { MdOutlineNoteAlt } from "react-icons/md";
-
 import panadol from "../../assets/panadol.png";
-
 import "./OrderDetails.css";
 
 const USE_DUMMY_DATA = true;
 
 const dummyOrder = {
   id: 1,
-
   status: "pending",
-
   created_at: "2026-08-22 11:15",
-
   total: 1600,
-
   customer: {
     id: 1,
     name: "محمد علي أحمد",
+    delivery_price: 200,
   },
 
   delivery_agent: {
@@ -44,8 +37,6 @@ const dummyOrder = {
     city: "الحمدانية",
     details: "أمام جامع الصديق",
   },
-
-  customer_notes: "يرجى الاتصال قبل الوصول",
 
   prescription: {
     image: panadol,
@@ -120,9 +111,7 @@ const OrderDetails = () => {
 
   const [updating, setUpdating] = useState(false);
 
-  /* =========================
-     Fetch Order Later
-  ========================= */
+  //  Fetch Order Later
 
   useEffect(() => {
     if (USE_DUMMY_DATA) {
@@ -152,17 +141,9 @@ const OrderDetails = () => {
     fetchOrder();
   }, [orderId]);
 
-  /* =========================
-     Back To Orders
-  ========================= */
-
   const backToOrders = () => {
     navigate("/Pharmacy/home/orders");
   };
-
-  /* =========================
-     Update Status
-  ========================= */
 
   const updateOrderStatus = async (newStatus) => {
     if (USE_DUMMY_DATA) {
@@ -194,25 +175,13 @@ const OrderDetails = () => {
     }
   };
 
-  /* =========================
-     Accept Order
-  ========================= */
-
   const acceptOrder = () => {
     updateOrderStatus("accepted");
   };
 
-  /* =========================
-     Reject Order
-  ========================= */
-
   const rejectOrder = () => {
     updateOrderStatus("rejected");
   };
-
-  /* =========================
-     Assign Driver
-  ========================= */
 
   const assignDriver = () => {
     if (!selectedDriver) {
@@ -304,18 +273,18 @@ const OrderDetails = () => {
         <h3>تفاصيل الطلب :</h3>
 
         <Button className="order-back-btn" onClick={backToOrders}>
-          <FaChevronLeft />
           عودة للطلبات
+          <FaChevronLeft />
         </Button>
       </div>
 
       {/* ================= ACTIONS ================= */}
 
-      <div className="order-top-actions">
+      {/* <div className="order-top-actions">
         <Button className="edit-order-btn">تعديل الطلب</Button>
 
         <Button className="delete-order-btn">حذف الطلب</Button>
-      </div>
+      </div> */}
 
       {/* ================= SUMMARY ================= */}
 
@@ -375,13 +344,9 @@ const OrderDetails = () => {
             <thead>
               <tr>
                 <th>المنتج</th>
-
                 <th>السعر</th>
-
                 <th>الكمية</th>
-
                 <th>الإجمالي</th>
-
                 <th>يتطلب وصفة</th>
               </tr>
             </thead>
@@ -416,9 +381,15 @@ const OrderDetails = () => {
           </table>
 
           <div className="order-total">
-            <span>الإجمالي الكلي:</span>
+            <div>
+              <span>سعر التوصيل :</span>
+              <strong>{order.tax}</strong>
+            </div>
+            <div>
+              <span>الإجمالي الكلي:</span>
 
-            <strong>{order.total} ل.س</strong>
+              <strong>{order.total} ل.س</strong>
+            </div>
           </div>
         </div>
 
@@ -434,15 +405,6 @@ const OrderDetails = () => {
             <p>{order.address?.city}</p>
 
             <p>{order.address?.details}</p>
-          </div>
-
-          <div className="order-info-card">
-            <h4>
-              <MdOutlineNoteAlt />
-              ملاحظات العميل
-            </h4>
-
-            <p>{order.customer_notes || "لا توجد ملاحظات"}</p>
           </div>
 
           {/* ================= DRIVER ================= */}

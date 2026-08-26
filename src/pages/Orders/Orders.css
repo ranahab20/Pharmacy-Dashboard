@@ -18,6 +18,7 @@
     font-size: 20px;
     font-weight: 700;
 }
+
 .search-ord {
     position: relative;
     width: 250px;
@@ -104,4 +105,59 @@ color: red;
 cursor: pointer;
 transform: scale(2.0);
 background-color: #f4f7fb;
+}
+.status-yellow{
+display: inline-block;
+    min-width: 65px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    background-color: #f3c623;
+        color: #5f4a00;
+}
+.status-green{
+display: inline-block;
+    min-width: 65px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    background-color: #59c6a1;
+    color: #0d4d3a;
+}
+.status-red{
+display: inline-block;
+    min-width: 65px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    background-color: #e74c3c;
+     color: #ffffff;
+}
+.status-g{
+display: inline-block;
+    min-width: 65px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    background-color: #2aa86b;
+  color: #ffffff;
+}
+.status-blue{
+display: inline-block;
+    min-width: 65px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    background-color: #43a5c7;
+    color: #0b4052;
 }

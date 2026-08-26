@@ -66,14 +66,17 @@ const AddProduct = () => {
               onChange={handleChange}
             ></Input>
             <label htmlFor="prdName">التصنيف :</label>
-            <Input
+            <select onChange={handleChange}>
+            {  ["kids","beauty","tools"].map((med)=><option value={med}>{med}</option>)
+            }</select>
+            {/* <Input
               type="text"
               placeholder="أدخل التصنيف "
               id="prdctg"
               name="category_id"
               value={formData.category_id}
               onChange={handleChange}
-            ></Input>
+            ></Input> */}
             <label htmlFor="prdName">الوصف :</label>
             <Input
               type="text"

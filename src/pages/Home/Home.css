@@ -1,26 +1,145 @@
-.container-home{
-    position: fixed;
-    height: calc(100vh - 90px);
-    width: 900px;
-    top: 80px;
-    left: 10px;
-    background-color: rgba(244, 247, 251, 1);
-    border-radius: 16px;
-    direction: rtl;
-    padding: 10px 12px;
-    overflow-y: auto;
+.container-home {
+  width: 100%;
+  min-width: 0;
+
+  min-height: calc(100vh - 90px);
+
+  background-color: rgba(244, 247, 251, 1);
+
+  border-radius: 16px;
+
+  direction: rtl;
+
+  padding: 10px 12px;
+
+  overflow-x: hidden;
 }
-h3{
-    margin-bottom: 5px;
-    font-size: 16px;
+
+
+/* =======================
+   العنوان
+======================= */
+
+.container-home h3 {
+  margin: 0 0 5px;
+
+  font-size: 16px;
 }
-.card-div{
-    display: flex;
-    justify-content: space-between;
+
+
+/* =======================
+   Cards
+======================= */
+
+.card-div {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-top: 15px;
 }
-.buttom-section{
-    margin: 10px 0;
-    height: 400px;
-    display: flex;
-    justify-content: space-between;
+
+
+/* مهم لكي لا تكسر الـ cards العرض */
+.card-div > * {
+  min-width: 0;
+  width: 100%;
+}
+
+
+/* =======================
+   Charts
+======================= */
+
+.buttom-section {
+  width: 100%;
+
+  margin: 15px 0;
+
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 15px;
+}
+
+.piechart,
+.barchart {
+  width: 100%;
+
+  min-width: 0;
+
+  min-height: 350px;
+}
+
+
+/* =======================
+   Tablet
+======================= */
+
+@media (max-width: 1100px) {
+
+  .card-div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .buttom-section {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =======================
+   Mobile
+======================= */
+
+@media (max-width: 768px) {
+
+  .container-home {
+    padding: 10px;
+  }
+
+  .container-home h3 {
+    font-size: 15px;
+  }
+
+  .card-div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .buttom-section {
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+  }
+
+  .piechart,
+  .barchart {
+    min-height: 300px;
+  }
+}
+
+
+/* =======================
+   Small Mobile
+======================= */
+
+@media (max-width: 480px) {
+
+  .card-div {
+    grid-template-columns: 1fr;
+  }
+
+  .piechart,
+  .barchart {
+    min-height: 260px;
+  }
+
 }

@@ -1,0 +1,104 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: #f4f7fb;
+  overflow-x: hidden;
+}
+
+.layout {
+  width: 100%;
+  min-height: 100vh;
+  direction: rtl;
+}
+
+
+/* =========================
+   Desktop
+========================= */
+
+.content {
+  margin-right: 310px;
+
+  width: calc(100% - 310px);
+
+  min-width: 0;
+  min-height: 100vh;
+
+  padding: 90px 20px 20px;
+
+  transition: 
+    width 0.3s ease,
+    margin-right 0.3s ease;
+}
+
+
+/* أي صفحة داخل Outlet */
+.content > * {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+
+/* =========================
+   Tablet
+========================= */
+
+@media (max-width: 1100px) {
+
+  .content {
+    margin-right: 250px;
+
+    width: calc(100% - 250px);
+
+    padding: 90px 15px 20px;
+  }
+}
+
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 768px) {
+
+  .content {
+    margin-right: 0;
+
+    width: 100%;
+
+    padding: 80px 12px 20px;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    background-color: rgba(0, 0, 0, 0.35);
+
+    z-index: 90;
+  }
+}
+
+
+/* =========================
+   Small phones
+========================= */
+
+@media (max-width: 480px) {
+
+  .content {
+    padding: 75px 8px 15px;
+  }
+}

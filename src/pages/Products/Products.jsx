@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import { FaSearch } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
 import "./Products.css";
 import Button from "../../components/Button/Button";
-import FormModal from "../../components/FormModal/FormModal";
 import panadol from "../../assets/panadol.png";
 import { useNavigate } from "react-router-dom";
 import { IoEyeOutline } from "react-icons/io5";
-
+import { FaSearch } from "react-icons/fa";
 
 const initialProducts = [
   {
@@ -20,6 +18,7 @@ const initialProducts = [
     is_requires_prescription: false,
     status: "متوفر",
   },
+
   {
     id: 2,
     name: "Augmentin 625mg",
@@ -31,6 +30,7 @@ const initialProducts = [
     is_requires_prescription: true,
     status: "متوفر",
   },
+
   {
     id: 3,
     name: "Vitamin C",
@@ -42,6 +42,7 @@ const initialProducts = [
     is_requires_prescription: false,
     status: "متوفر",
   },
+
   {
     id: 4,
     name: "Brufen 400mg",
@@ -53,6 +54,7 @@ const initialProducts = [
     is_requires_prescription: false,
     status: "كمية قليلة",
   },
+
   {
     id: 5,
     name: "Amoxicillin 500mg",
@@ -64,6 +66,7 @@ const initialProducts = [
     is_requires_prescription: true,
     status: "غير متوفر",
   },
+
   {
     id: 6,
     name: "Omega 3",
@@ -75,6 +78,7 @@ const initialProducts = [
     is_requires_prescription: false,
     status: "متوفر",
   },
+
   {
     id: 7,
     name: "CeraVe Moisturizer",
@@ -86,6 +90,7 @@ const initialProducts = [
     is_requires_prescription: false,
     status: "متوفر",
   },
+
   {
     id: 8,
     name: "Ventolin Inhaler",
@@ -98,112 +103,223 @@ const initialProducts = [
     status: "متوفر",
   },
 ];
-const Products = () => {
-  const [product_name, setProductName] = useState("");
-  const [showForm, setShowForm] = useState(false);
-  const [products, setProducts] = useState(initialProducts);
-  const [editingId, setEditingId] = useState(null);
-  const navigate = useNavigate();
-  const [editions, setEditions] = useState({
-    name: "",
-    quantity: 0,
-    image: null,
-    category: "",
-    status: false,
-    is_requires_prescription: false,
-    price: 0,
-    description: "",
-  });
 
-  // const openForm = () => {
-  //   setShowForm(true);
-  // };
-  // const closeForm = () => {
-  //   setShowForm(false);
-  //   setProductName("");
-  // };
-  const AddHandler = () => {
-    navigate('/Pharmacy/home/addProduct');
+/* ==========================================
+   Empty Edit Form
+========================================== */
+
+const emptyEditForm = {
+  name: "",
+  quantity: "",
+  image: null,
+  category: "",
+  status: "",
+  is_requires_prescription: false,
+  price: "",
+  description: "",
+};
+
+const Products = () => {
+  const navigate = useNavigate();
+
+  const [products, setProducts] = useState(initialProducts);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [editingId, setEditingId] = useState(null);
+
+  const [editions, setEditions] = useState(emptyEditForm);
+
+  const [previewUrl, setPreviewUrl] = useState("");
+
+  const addHandler = () => {
+    navigate("/Pharmacy/home/addProduct");
   };
 
-  const editprod = (product) => {
+  const handleEditChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    setEditions((prev) => ({
+      ...prev,
+
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  /* ==========================================
+     Start Editing Product
+  ========================================== */
+
+  const editProduct = (product) => {
+    // في حال كان هناك preview سابق لم يتم حفظه
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl("");
+    }
+
     setEditingId(product.id);
+
     setEditions({
       name: product.name,
       quantity: product.quantity,
-      price: product.price,
-      description: product.description,
-      is_requires_prescription: product.is_requires_prescription,
+      image: null,
+
+      category: product.category,
+
       status: product.status,
-      image: product.image,
+
+      is_requires_prescription: product.is_requires_prescription,
+
+      price: product.price,
+
+      description: product.description,
     });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    // حذف preview القديم من الذاكرة
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
+    const newPreviewUrl = URL.createObjectURL(file);
+
+    setPreviewUrl(newPreviewUrl);
+
+    setEditions((prev) => ({
+      ...prev,
+      image: file,
+    }));
   };
 
   const saveEdit = (id) => {
     setProducts((prevProducts) =>
       prevProducts.map((product) => {
-        if (product.id === id) {
-          return {
-            ...product,
-            ...editions,
-          };
+        if (product.id !== id) {
+          return product;
         }
 
-        return product;
+        return {
+          ...product,
+
+          name: editions.name,
+
+          category: editions.category,
+
+          description: editions.description,
+
+          price: Number(editions.price),
+
+          quantity: Number(editions.quantity),
+
+          status: editions.status,
+
+          is_requires_prescription: editions.is_requires_prescription,
+
+          /*
+            إذا اختار المستخدم صورة جديدة
+            استخدم previewUrl.
+
+            إذا لم يختر صورة
+            احتفظ بالصورة القديمة.
+          */
+          image: editions.image instanceof File ? previewUrl : product.image,
+        };
       }),
     );
 
-    setEditingId(null);
+    /*
+      لا نستخدم revoke هنا للصورة المحفوظة
+      لأن product.image أصبح يستخدم previewUrl.
+    */
 
-    setEditions({
-      name: "",
-      quantity: 0,
-      image: null,
-      category: "",
-      status: false,
-      is_requires_prescription: false,
-      price: 0,
-      description: "",
-    });
+    setPreviewUrl("");
+
+    resetEdit();
   };
 
-  const addProduct = () => {
-    if (!product_name.trim()) {
-      return;
+  /* ==========================================
+     Cancel Editing
+  ========================================== */
+
+  const cancelEdit = () => {
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl("");
     }
 
-    const productData = {
-      name: product_name,
-    };
-
-    console.log("Product data:", productData);
-    const newProduct = {
-      id: products.length + 1,
-      name: product_name,
-      category: "غير محدد",
-      price: 0,
-    };
-
-    setProducts((prevProducts) => [...prevProducts, newProduct]);
-    closeForm();
+    resetEdit();
   };
+
+  /* ==========================================
+     Reset Edit State
+  ========================================== */
+
+  const resetEdit = () => {
+    setEditingId(null);
+
+    setEditions(emptyEditForm);
+  };
+
+  /* ==========================================
+     Product Details
+  ========================================== */
+
   const viewProduct = (productId) => {
     navigate(`/Pharmacy/home/products/${productId}`);
   };
 
+  /* ==========================================
+     Search
+  ========================================== */
+
+  const filteredProducts = products.filter((product) => {
+    const search = searchTerm.toLowerCase().trim();
+
+    return (
+      product.name.toLowerCase().includes(search) ||
+      product.category.toLowerCase().includes(search) ||
+      product.description.toLowerCase().includes(search)
+    );
+  });
+
+  /*
+    إذا خرجنا من الصفحة وفيه preview
+    غير مستخدم، نحاول تنظيفه.
+  */
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl && editions.image instanceof File) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
   return (
     <div className="prd-div">
       <div className="prd-header">
-        المنتجات
-        <Button className="ctg-btn" onClick={AddHandler}>
+        <h3>المنتجات</h3>
+
+        <Button className="ctg-btn" onClick={addHandler}>
           منتج جديد +
         </Button>
       </div>
-      <div className="search-prd">
-        <input type="text" placeholder="بحث عن .." className="search" />
-      </div>
 
-     
+      <div className="search-prd">
+        <FaSearch className="product-search-icon" />
+
+        <input
+          type="text"
+          placeholder="بحث عن منتج..."
+          className="product-search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
 
       <div className="prd-table">
         <table>
@@ -218,168 +334,235 @@ const Products = () => {
               <th>الكمية</th>
               <th>يتطلب وصفة</th>
               <th>الحالة</th>
-              <th></th>
-              <th></th>
+              <th>تعديل</th>
+              <th>التفاصيل</th>
             </tr>
           </thead>
+
           <tbody>
-            {products.map((product) => (
-              <tr key={product.id}>
-                <td>{product.id}</td>
-                <td>
-                  {editingId === product.id ? (
-                    <input
-                      value={editions.name}
-                      onChange={(e) =>
-                        setEditions({
-                          ...editions,
-                          name: e.target.value,
-                        })
-                      }
-                    />
-                  ) : (
-                    product.name
-                  )}
-                </td>
-                <td>
-                  {editingId === product.id ? (
-                    <input
-                      value={editions.image}
-                      onChange={(e) =>
-                        setEditions({
-                          ...editions,
-                          image: e.target.value,
-                        })
-                      }
-                    />
-                  ) : (
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="prd-img"
-                    />
-                  )}
-                </td>
-                <td>
-                  {editingId === product.id ? (
-                    <input
-                      value={editions.category}
-                      onChange={(e) =>
-                        setEditions({
-                          ...editions,
-                          category: e.target.value,
-                        })
-                      }
-                    />
-                  ) : (
-                    product.category
-                  )}
-                </td>
-                <td>
-                  {editingId === product.id ? (
-                    <input
-                      value={editions.description}
-                      onChange={(e) =>
-                        setEditions({
-                          ...editions,
-                          description: e.target.value,
-                        })
-                      }
-                    />
-                  ) : (
-                    product.description
-                  )}
-                </td>
-                <td>
-                  {editingId === product.id ? (
-                    <input
-                      value={editions.price}
-                      onChange={(e) =>
-                        setEditions({
-                          ...editions,
-                          price: e.target.value,
-                        })
-                      }
-                    />
-                  ) : (
-                    product.price
-                  )}
-                </td>
-                <td>
-                  {editingId === product.id ? (
-                    <input
-                      value={editions.quantity}
-                      onChange={(e) =>
-                        setEditions({
-                          ...editions,
-                          quantity: e.target.value,
-                        })
-                      }
-                    />
-                  ) : (
-                    product.quantity
-                  )}
-                </td>
-                <td>
-                  {editingId === product.id ? (
-                    <input
-                      value={editions.is_requires_prescription}
-                      checked={editions.is_requires_prescription}
-                      onChange={(e) =>
-                        setEditions({
-                          ...editions,
-                          is_requires_prescription: e.target.checked,
-                        })
-                      }
-                    />
-                  ) : product.is_requires_prescription ? (
-                    "لا"
-                  ) : (
-                    " نعم"
-                  )}
-                </td>
-                <td>
-                  {editingId === product.id ? (
-                    <input
-                      value={editions.status}
-                      onChange={(e) =>
-                        setEditions({
-                          ...editions,
-                          status: e.target.value,
-                        })
-                      }
-                    />
-                  ) : (
-                    product.status
-                  )}
-                </td>
-                <td>
-                  {editingId === product.id ? (
-                    <button
-                      className="save-edit"
-                      onClick={() => saveEdit(product.id)}
-                    >
-                      حفظ
-                    </button>
-                  ) : (
-                    <button
-                      className="edit-btn"
-                      onClick={() => editprod(product)}
-                    >
-                      ✏️
-                    </button>
-                  )}
-                </td>
-                <td>
-                  <button
-                    className="prd-info"
-                    onClick={() => viewProduct(product.id)}
-                  >
-                    <IoEyeOutline />
-                  </button>
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => {
+                const isEditing = editingId === product.id;
+
+                return (
+                  <tr key={product.id}>
+                    {/* ID */}
+
+                    <td>{product.id}</td>
+
+                    {/* Name */}
+
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          name="name"
+                          value={editions.name}
+                          onChange={handleEditChange}
+                          className="edit-input"
+                        />
+                      ) : (
+                        product.name
+                      )}
+                    </td>
+
+                    {/* Image */}
+
+                    <td>
+                      {isEditing ? (
+                        <div className="edit-image-container">
+                          <img
+                            src={previewUrl || product.image}
+                            alt={product.name}
+                            className="prd-img"
+                          />
+
+                          <input
+                            type="file"
+                            id={`image-${product.id}`}
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            hidden
+                          />
+
+                          <label
+                            htmlFor={`image-${product.id}`}
+                            className="change-image-btn"
+                          >
+                            تغيير الصورة
+                          </label>
+                        </div>
+                      ) : (
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="prd-img"
+                        />
+                      )}
+                    </td>
+
+                    {/* Category */}
+
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          name="category"
+                          value={editions.category}
+                          onChange={handleEditChange}
+                          className="edit-input"
+                        />
+                      ) : (
+                        product.category
+                      )}
+                    </td>
+
+                    {/* Description */}
+
+                    <td>
+                      {isEditing ? (
+                        <textarea
+                          name="description"
+                          value={editions.description}
+                          onChange={handleEditChange}
+                          className="edit-input edit-description"
+                        />
+                      ) : (
+                        product.description
+                      )}
+                    </td>
+
+                    {/* Price */}
+
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="number"
+                          name="price"
+                          min="0"
+                          value={editions.price}
+                          onChange={handleEditChange}
+                          className="edit-input"
+                        />
+                      ) : (
+                        `${product.price} ل.س`
+                      )}
+                    </td>
+
+                    {/* Quantity */}
+
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="number"
+                          name="quantity"
+                          min="0"
+                          value={editions.quantity}
+                          onChange={handleEditChange}
+                          className="edit-input"
+                        />
+                      ) : (
+                        product.quantity
+                      )}
+                    </td>
+
+                    {/* Prescription */}
+
+                    <td>
+                      {isEditing ? (
+                        <label className="checkbox-edit">
+                          <input
+                            type="checkbox"
+                            name="is_requires_prescription"
+                            checked={editions.is_requires_prescription}
+                            onChange={handleEditChange}
+                          />
+
+                          <span>يتطلب وصفة</span>
+                        </label>
+                      ) : product.is_requires_prescription ? (
+                        "نعم"
+                      ) : (
+                        "لا"
+                      )}
+                    </td>
+
+                    {/* Status */}
+
+                    <td>
+                      {isEditing ? (
+                        <select
+                          name="status"
+                          value={editions.status}
+                          onChange={handleEditChange}
+                          className="edit-input"
+                        >
+                          <option value="متوفر">متوفر</option>
+
+                          <option value="كمية قليلة">كمية قليلة</option>
+
+                          <option value="غير متوفر">غير متوفر</option>
+                        </select>
+                      ) : (
+                        <span className={`status status-${product.status}`}>
+                          {product.status}
+                        </span>
+                      )}
+                    </td>
+
+                    {/* Edit / Save */}
+
+                    <td>
+                      {isEditing ? (
+                        <div className="edit-actions">
+                          <button
+                            type="button"
+                            className="save-edit"
+                            onClick={() => saveEdit(product.id)}
+                          >
+                            حفظ
+                          </button>
+
+                          <button
+                            type="button"
+                            className="cancel-edit"
+                            onClick={cancelEdit}
+                          >
+                            إلغاء
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="edit-btn"
+                          onClick={() => editProduct(product)}
+                          aria-label="تعديل المنتج"
+                        >
+                          ✏️
+                        </button>
+                      )}
+                    </td>
+                    {/* Details */}
+                    <td>
+                      <button
+                        type="button"
+                        className="prd-info"
+                        onClick={() => viewProduct(product.id)}
+                        aria-label="تفاصيل المنتج"
+                      >
+                        <IoEyeOutline />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan="11" className="no-products">
+                  لا يوجد منتجات مطابقة للبحث
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

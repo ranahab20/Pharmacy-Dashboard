@@ -9,11 +9,11 @@ import { FaCarAlt } from "react-icons/fa";
 import { FaPowerOff } from "react-icons/fa6";
 import { IoPersonOutline } from "react-icons/io5";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const { pathname } = useLocation();
 
   return (
-    <aside className="sidebar">
+      <aside className={`sidebar ${isOpen ? "sidebar-open" : ""}`}>
       <ul className="sidebar-list">
         <li>
           <Link
@@ -21,6 +21,7 @@ const Sidebar = () => {
             className={`nav-link ${
               pathname === "/Pharmacy/home" ? "active" : ""
             }`}
+              onClick={onClose}
           >
             <RiHome3Line />
             <span>الرئيسية</span>
@@ -30,6 +31,7 @@ const Sidebar = () => {
         <li>
           <Link
             to="/Pharmacy/home/categories"
+              onClick={onClose}
             className={`nav-link ${
               pathname === "/Pharmacy/home/categories" ? "active" : ""
             }`}
@@ -42,6 +44,7 @@ const Sidebar = () => {
         <li>
           <Link
             to="/Pharmacy/home/products"
+              onClick={onClose}
             className={`nav-link ${
               pathname.startsWith("/Pharmacy/home/products") ||
               pathname === "/Pharmacy/home/addProduct"
@@ -57,6 +60,7 @@ const Sidebar = () => {
         <li>
           <Link
             to="/Pharmacy/home/orders"
+              onClick={onClose}
             className={`nav-link ${
               pathname.startsWith("/Pharmacy/home/orders") ||
               pathname === "/Pharmacy/home/orderDetails"
@@ -72,6 +76,7 @@ const Sidebar = () => {
         <li>
           <Link
             to="/Pharmacy/home/customers"
+              onClick={onClose}
             className={`nav-link ${
               pathname === "/Pharmacy/home/customers" ? "active" : ""
             }`}
@@ -83,9 +88,13 @@ const Sidebar = () => {
 
         <li>
           <Link
+            onClick={onClose}
             to="/Pharmacy/home/drivers"
             className={`nav-link ${
-              pathname.startsWith("/Pharmacy/home/drivers") ||  pathname === "/Pharmacy/home/AddDriver"  ? "active" : ""
+              pathname.startsWith("/Pharmacy/home/drivers") ||
+              pathname === "/Pharmacy/home/AddDriver"
+                ? "active"
+                : ""
             }`}
           >
             <FaCarAlt />
@@ -93,20 +102,10 @@ const Sidebar = () => {
           </Link>
         </li>
 
-        <li>
-          <Link
-            to="/Pharmacy/home/profile"
-            className={`nav-link ${
-              pathname === "/Pharmacy/home/profile" ? "active" : ""
-            }`}
-          >
-            <IoPersonOutline />
-            <span>الملف الشخصي</span>
-          </Link>
-        </li>
 
         <li className="Logout">
           <Link
+            onClick={onClose}
             to="/Pharmacy/login"
             className={`nav-link ${
               pathname === "/Pharmacy/login" ? "active" : ""
