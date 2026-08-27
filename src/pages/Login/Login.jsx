@@ -7,20 +7,48 @@ import "./Login.css";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaChevronLeft } from "react-icons/fa6";
+import api from "../../api/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [serverError, setServerError] = useState("");
   const [user, setUser] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const inputHandler = (e) => {
     setUser({
       ...user,
       [e.target.name]: e.target.value,
     });
     validateField(e.target.name, e.target.value);
-    console.log(user);
+    console.log(e.target.value);
+    setServerError("");
   };
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(user);
+    try {
+      setLoading(true);
+      setServerError("");
+      const response = await api.post("/auth/login", {
+        email: user.email,
+        password: user.password,
+      });
+      console.log("Login response:", response.data);
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+      navigate("/Pharmacy/home");
+    } catch (error) {
+      console.error("Login Error:", error);
+      if (error.response.status === 401) {
+        setServerError("البريد الإلكتروني أو كلمة المرور غير صحيحة");
+      } else {
+        setServerError(
+          error.response.data?.message || "حدث خطأ أثناء تسجيل الدخول",
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
   };
   const [visible, setVisiblity] = useState(false);
   const toggleHandler = (e) => {
@@ -32,7 +60,7 @@ const Login = () => {
       if (value.length < 8) {
         setError({
           ...errors,
-          password:"يجب أن تتكون كلمة المرور من 8 أحرف على الأقل"
+          password: "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
         });
       } else {
         setError({
@@ -81,12 +109,13 @@ const Login = () => {
                 </span>
               </div>
               {errors.password && <p className="error">{errors.password}</p>}
+              {serverError && <p className="error">{serverError}</p>}
             </div>
             <Button
               type="submit"
               className="log-btn"
               disabled={
-                !user.email.trim() || !user.password.trim() || errors.password
+                !user.email.trim() || !user.password.trim() || errors.password ||loading
               }
             >
               تسجيل دخول{" "}
