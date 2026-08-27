@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import "./Sidebar.css";
 import { BiCategoryAlt } from "react-icons/bi";
@@ -9,18 +9,30 @@ import { IoPeople } from "react-icons/io5";
 import { FaCarAlt } from "react-icons/fa";
 import { FaPowerOff } from "react-icons/fa6";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
+import api from "../../api/axiosInstance";
+import toast from "react-hot-toast";
 
 const Sidebar = ({ isOpen, onClose }) => {
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const handleLogout = () => {
-    setShowLogoutModal(false);
-
-    // لاحقًا إذا عندك token:
-    // localStorage.removeItem("token");
-
-    navigate("/Pharmacy/login");
+  const handleLogout = async () => {
+    try {
+      setLogoutLoading(true);
+      const response = await api.post("/auth/logout");
+      localStorage.removeItem("token");
+      setShowLogoutModal(false);
+      toast.success(response.data.message);
+      navigate("/Pharmacy/login");
+    } catch(error) {
+      toast.error(
+        error.response?.data?.message || "حدث خطأ أثناء تسجيل الخروج",
+      );
+    } finally {
+      setLogoutLoading(false);
+    }
   };
   return (
     <>
@@ -114,11 +126,13 @@ const Sidebar = ({ isOpen, onClose }) => {
           </li>
 
           <li className="Logout">
+           
             <button
               className="logout-btn"
               onClick={() => setShowLogoutModal(true)}
             >
-              تسجيل الخروج
+             <FaPowerOff/>
+             <span>تسجيل الخروج</span>
             </button>
           </li>
         </ul>

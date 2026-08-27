@@ -9,6 +9,7 @@ const ConfirmModal = ({
   cancelText = "إلغاء",
   onConfirm,
   onCancel,
+  onClick
 }) => {
   if (!isOpen) return null;
 

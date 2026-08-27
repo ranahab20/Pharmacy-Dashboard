@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./App.css";
 import Splash from "./pages/Splash/Splash";
 import Login from "./pages/Login/Login";
@@ -14,6 +13,7 @@ import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import AddProduct from "./pages/AddProduct/AddProduct";
 import OrderDetails from "./pages/OrderDetails/OrderDetails";
 import AddDriver from "./pages/AddDriver/AddDriver";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const router = createBrowserRouter([
@@ -41,7 +41,7 @@ function App() {
           path: "products",
           element: <Products />,
         },
-         {
+        {
           path: "products/:productId",
           element: <ProductDetails />,
         },
@@ -65,14 +65,20 @@ function App() {
           path: "drivers",
           element: <Drivers />,
         },
-         {
+        {
           path: "addDriver/",
           element: <AddDriver />,
         },
       ],
     },
   ]);
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <Toaster position="top-center" reverseOrder={false} />
+
+      <RouterProvider router={router} />
+    </>
+  );
 }
 
 export default App;

@@ -9,6 +9,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaChevronLeft } from "react-icons/fa6";
 import api from "../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -36,11 +37,15 @@ const Login = () => {
       console.log("Login response:", response.data);
       const token = response.data.token;
       localStorage.setItem("token", token);
+      toast.success(response.data.message);
       navigate("/Pharmacy/home");
     } catch (error) {
       console.error("Login Error:", error);
-      if (error.response.status === 401) {
+      if (error.response?.status === 401) {
         setServerError("البريد الإلكتروني أو كلمة المرور غير صحيحة");
+        toast.error(
+          error.response?.data?.message || "حدث خطأ أثناء تسجيل الدخول",
+        );
       } else {
         setServerError(
           error.response.data?.message || "حدث خطأ أثناء تسجيل الدخول",
@@ -115,7 +120,10 @@ const Login = () => {
               type="submit"
               className="log-btn"
               disabled={
-                !user.email.trim() || !user.password.trim() || errors.password ||loading
+                !user.email.trim() ||
+                !user.password.trim() ||
+                errors.password ||
+                loading
               }
             >
               تسجيل دخول{" "}
