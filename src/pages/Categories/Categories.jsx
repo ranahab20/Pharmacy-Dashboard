@@ -7,8 +7,10 @@ import { BiCategoryAlt } from "react-icons/bi";
 import "./Categories.css";
 import api from "../../api/axiosInstance";
 import toast from "react-hot-toast";
+import Loading from "../Loading/Loading";
 
 const Categories = () => {
+  const[loading, setLoading]=useState(true);
   const [categoryName, setCategoryName] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -24,6 +26,7 @@ const Categories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        setLoading(true);
         const response = await api.get("/categories");
 
         console.log("Categories:", response.data);
@@ -35,6 +38,9 @@ const Categories = () => {
         
       } catch (error) {
         console.error("Error fetching categories:", error);
+      }finally
+      {
+        setLoading(false);
       }
     };
 
@@ -144,7 +150,9 @@ const Categories = () => {
       console.error("Error deleting category:", error);
     }
   };
-
+if (loading) {
+  return <Loading text="جاري تحميل التصنيفات..." />;
+}
   return (
     <div className="ctg-div">
       <div className="ctg-header">
