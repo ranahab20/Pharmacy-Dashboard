@@ -77,15 +77,15 @@ const Login = () => {
   };
   return (
     <>
-      <div className="container">
-        <div className="left-sec">
-          <img src={logo} alt="logo" className="logo" />
-          <p>مرحباً بك في نظام إدارة صيدلية دواءك</p>
+      <div className="login-page">
+        <div className="login-left">
+          <img src={logo} alt="logo" className="login-logo" />
+          <p className="login-welcome">مرحباً بك في نظام إدارة صيدلية دواءك</p>
         </div>
-        <div className="right-sec">
-          <form className="login" onSubmit={submitHandler}>
-            <Title classname={"log-title"}>تسجيل الدخول</Title>
-            <div className="email-sec">
+        <div className="login-right">
+          <form className="login-form" onSubmit={submitHandler}>
+            <Title classname={"login-title"}>تسجيل الدخول</Title>
+            <div className="login-field">
               <label htmlFor="email">الحساب الالكتروني</label>
               <Input
                 type="email"
@@ -97,9 +97,9 @@ const Login = () => {
                 required
               />
             </div>
-            <div className="pass-sec">
+            <div className="login-field">
               <label htmlFor="password">كلمة المرور</label>
-              <div className="flex-icon">
+              <div className="login-password-wrapper">
                 <Input
                   type={visible ? "text" : "password"}
                   placeholder="أدخل كلمة المرور"
@@ -109,16 +109,16 @@ const Login = () => {
                   value={user.password}
                   required
                 />
-                <span className="eye-icon" onClick={toggleHandler}>
+                <span className="login-eye" onClick={toggleHandler}>
                   {visible ? <FaEye /> : <FaEyeSlash />}
                 </span>
               </div>
-              {errors.password && <p className="error">{errors.password}</p>}
-              {serverError && <p className="error">{serverError}</p>}
+              {errors.password && <p className="login-error">{errors.password}</p>}
+              {serverError && <p className="login-error">{serverError}</p>}
             </div>
             <Button
               type="submit"
-              className="log-btn"
+              className="login-button"
               disabled={
                 !user.email.trim() ||
                 !user.password.trim() ||
@@ -127,7 +127,7 @@ const Login = () => {
               }
             >
               تسجيل دخول{" "}
-              <span className="chevron-icon">
+              <span className="login-chevron">
                 <FaChevronLeft />
               </span>
             </Button>
