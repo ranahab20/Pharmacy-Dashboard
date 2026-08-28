@@ -27,7 +27,6 @@
     border-radius: 16px;
     padding: 10px;
     box-shadow: 0 2px 8px rgba(209, 246, 243, 1);
-
     overflow: hidden;
 }
 .ctg-table table {
@@ -67,9 +66,6 @@
     text-align: center;
 }
 
-
-/* Edit Button */
-
 .edit-btn,
 .delete-btn {
     border: none;
@@ -83,24 +79,19 @@
     justify-content: center;
     transition: 0.2s ease;
 }
-
-
 .edit-btn {
-    background-color: #eef4f8;
+    background-color: #e8f0f7;
+    color: #2a3f5c;
 }
-
 .delete-btn {
-    background-color: #fff0f0;
+    background-color:white;
 }
-
-
 .edit-btn:hover {
-    background-color: #dce8f0;
+    background-color: #f8e4de;
     transform: translateY(-1px);
 }
-
 .delete-btn:hover {
-    background-color: #ffe0e0;
+    background-color: #e74c3c;;
     transform: translateY(-1px);
 }
 .ctg-btn{
@@ -116,3 +107,4 @@
     cursor: pointer;
     font-size: 14px;
 }
+
