@@ -14,6 +14,7 @@ import AddProduct from "./pages/AddProduct/AddProduct";
 import OrderDetails from "./pages/OrderDetails/OrderDetails";
 import AddDriver from "./pages/AddDriver/AddDriver";
 import { Toaster } from "react-hot-toast";
+import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
   const router = createBrowserRouter([
@@ -68,9 +69,14 @@ function App() {
         {
           path: "addDriver/",
           element: <AddDriver />,
-        },
+        }
+       
       ],
     },
+     {
+      path: "*",
+      element: <NotFound />,
+    }
   ]);
   return (
     <>
