@@ -576,3 +576,30 @@
     margin-top: 10px;
   }
 }
+.status {
+  display: inline-block;
+  min-width: 75px;
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  text-align: center;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-in_stock {
+  background-color: #e2f6ed;
+  color: #198754;
+}
+
+.status-low_stock {
+  background-color: #fff3cd;
+  color: #b77900;
+}
+
+.status-out_of_stock {
+  background-color: #fde8e8;
+  color: #d62c2c;
+}

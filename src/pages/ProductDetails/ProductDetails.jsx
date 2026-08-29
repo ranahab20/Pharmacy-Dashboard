@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import "./ProductDetails.css";
+import Loading from "../Loading/Loading";
 
 const ProductDetails = () => {
   const { product_id } = useParams();
-
+  const [loading, setLoading] = useState(true);
   const products = [];
   const product = products.find((item) => item.id === Number(product_id));
 
@@ -13,6 +14,21 @@ const ProductDetails = () => {
   const clickHandler = () => {
     navigate("/Pharmacy/home/products");
   };
+
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get(`/products/${id}`, formData);
+        console.log("Details", response.data.data);
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProductDetails();
+  }, []);
 
   return (
     <div className="prd-details-div">
@@ -22,7 +38,6 @@ const ProductDetails = () => {
           عودة للمنتجات
         </Button>
       </div>
-
 
       {/* بطاقة ملخص المنتج */}
       <div className="prd-summary-card">

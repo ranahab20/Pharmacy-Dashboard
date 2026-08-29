@@ -1,108 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "./Products.css";
+
 import Button from "../../components/Button/Button";
+import Loading from "../Loading/Loading";
+
 import panadol from "../../assets/panadol.png";
+
 import { useNavigate } from "react-router-dom";
+
 import { IoEyeOutline } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 
-const initialProducts = [
-  {
-    id: 1,
-    name: "Panadol Extra",
-    image: panadol,
-    category: "مسكنات",
-    description: "مسكن للألم وخافض للحرارة",
-    price: 15000,
-    quantity: 120,
-    is_requires_prescription: false,
-    status: "متوفر",
-  },
-
-  {
-    id: 2,
-    name: "Augmentin 625mg",
-    image: "/images/augmentin.jpg",
-    category: "مضادات حيوية",
-    description: "مضاد حيوي لعلاج الالتهابات البكتيرية",
-    price: 35000,
-    quantity: 45,
-    is_requires_prescription: true,
-    status: "متوفر",
-  },
-
-  {
-    id: 3,
-    name: "Vitamin C",
-    image: "/images/vitamin-c.jpg",
-    category: "فيتامينات ومكملات",
-    description: "مكمل غذائي لدعم جهاز المناعة",
-    price: 12000,
-    quantity: 80,
-    is_requires_prescription: false,
-    status: "متوفر",
-  },
-
-  {
-    id: 4,
-    name: "Brufen 400mg",
-    image: "/images/brufen.jpg",
-    category: "مسكنات",
-    description: "مسكن ومضاد للالتهاب",
-    price: 10000,
-    quantity: 8,
-    is_requires_prescription: false,
-    status: "كمية قليلة",
-  },
-
-  {
-    id: 5,
-    name: "Amoxicillin 500mg",
-    image: "/images/amoxicillin.jpg",
-    category: "مضادات حيوية",
-    description: "مضاد حيوي لعلاج العدوى البكتيرية",
-    price: 22000,
-    quantity: 0,
-    is_requires_prescription: true,
-    status: "غير متوفر",
-  },
-
-  {
-    id: 6,
-    name: "Omega 3",
-    image: "/images/omega3.jpg",
-    category: "فيتامينات ومكملات",
-    description: "مكمل غذائي يحتوي على أحماض أوميغا 3",
-    price: 28000,
-    quantity: 32,
-    is_requires_prescription: false,
-    status: "متوفر",
-  },
-
-  {
-    id: 7,
-    name: "CeraVe Moisturizer",
-    image: "/images/cerave.jpg",
-    category: "العناية بالبشرة",
-    description: "مرطب للبشرة الجافة والحساسة",
-    price: 45000,
-    quantity: 25,
-    is_requires_prescription: false,
-    status: "متوفر",
-  },
-
-  {
-    id: 8,
-    name: "Ventolin Inhaler",
-    image: "/images/ventolin.jpg",
-    category: "أدوية الجهاز التنفسي",
-    description: "بخاخ يساعد على تخفيف أعراض الربو",
-    price: 18000,
-    quantity: 12,
-    is_requires_prescription: true,
-    status: "متوفر",
-  },
-];
+import api from "../../api/axiosInstance";
+import toast from "react-hot-toast";
 
 /* ==========================================
    Empty Edit Form
@@ -110,19 +20,20 @@ const initialProducts = [
 
 const emptyEditForm = {
   name: "",
-  quantity: "",
   image: null,
-  category: "",
-  status: "",
-  is_requires_prescription: false,
-  price: "",
   description: "",
+  price: "",
+  quantity: "",
+  is_required_prescription: false,
 };
 
 const Products = () => {
   const navigate = useNavigate();
 
-  const [products, setProducts] = useState(initialProducts);
+  const [loading, setLoading] = useState(true);
+
+  const [products, setProducts] = useState([]);
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const [editingId, setEditingId] = useState(null);
@@ -131,9 +42,49 @@ const Products = () => {
 
   const [previewUrl, setPreviewUrl] = useState("");
 
+  /* ==========================================
+     GET Products
+  ========================================== */
+
+  const fetchProducts = async (showLoading = true) => {
+    try {
+      if (showLoading) {
+        setLoading(true);
+      }
+
+      const response = await api.get("/products?category_id=1");
+
+      console.log("Products response:", response.data);
+
+      const productsData = Array.isArray(response.data.data)
+        ? response.data.data
+        : [];
+
+      setProducts(productsData);
+    } catch (error) {
+      console.error("Error fetching Products:", error);
+    } finally {
+      if (showLoading) {
+        setLoading(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  /* ==========================================
+     Add Product
+  ========================================== */
+
   const addHandler = () => {
     navigate("/Pharmacy/home/addProduct");
   };
+
+  /* ==========================================
+     Input Change
+  ========================================== */
 
   const handleEditChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -146,41 +97,37 @@ const Products = () => {
   };
 
   /* ==========================================
-     Start Editing Product
+     Start Editing
   ========================================== */
 
   const editProduct = (product) => {
-    // في حال كان هناك preview سابق لم يتم حفظه
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
+
       setPreviewUrl("");
     }
 
     setEditingId(product.id);
 
     setEditions({
-      name: product.name,
-      quantity: product.quantity,
+      name: product.name || "",
       image: null,
-
-      category: product.category,
-
-      status: product.status,
-
-      is_requires_prescription: product.is_requires_prescription,
-
-      price: product.price,
-
-      description: product.description,
+      description: product.description || "",
+      price: product.price ?? "",
+      quantity: product.quantity ?? "",
+      is_required_prescription: product.is_required_prescription ?? false,
     });
   };
+
+  /* ==========================================
+     Image Change
+  ========================================== */
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
 
     if (!file) return;
 
-    // حذف preview القديم من الذاكرة
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
     }
@@ -191,72 +138,77 @@ const Products = () => {
 
     setEditions((prev) => ({
       ...prev,
+
       image: file,
     }));
   };
 
-  const saveEdit = (id) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) => {
-        if (product.id !== id) {
-          return product;
-        }
+ 
+  const saveEdit = async (id) => {
+    if (!editions.name.trim()) {
+      return;
+    }
 
-        return {
-          ...product,
+    try {
+      const formData = new FormData();
 
-          name: editions.name,
+      formData.append("name", editions.name);
 
-          category: editions.category,
+      formData.append("description", editions.description);
 
-          description: editions.description,
+      formData.append("price", editions.price);
 
-          price: Number(editions.price),
 
-          quantity: Number(editions.quantity),
+      formData.append("quantity", editions.quantity);
 
-          status: editions.status,
+      formData.append(
+        "is_required_prescription",
+        editions.is_required_prescription ? "1" : "0",
+      );
 
-          is_requires_prescription: editions.is_requires_prescription,
+      /* New Image */
 
-          /*
-            إذا اختار المستخدم صورة جديدة
-            استخدم previewUrl.
+      if (editions.image instanceof File) {
+        formData.append("image", editions.image);
+      }
 
-            إذا لم يختر صورة
-            احتفظ بالصورة القديمة.
-          */
-          image: editions.image instanceof File ? previewUrl : product.image,
-        };
-      }),
-    );
 
-    /*
-      لا نستخدم revoke هنا للصورة المحفوظة
-      لأن product.image أصبح يستخدم previewUrl.
-    */
+      const response = await api.post(`/products/${id}`, formData);
 
-    setPreviewUrl("");
+      console.log("Update response:", response.data);
 
-    resetEdit();
+      toast.success(response.data.message || "تم تعديل المنتج بنجاح");
+
+      await fetchProducts(false);
+
+      setPreviewUrl("");
+
+      resetEdit();
+    } catch (error) {
+      console.error("Error updating Product:", error);
+
+      console.log("Backend response:", error.response?.data);
+
+      toast.error(
+        error.response?.data?.message || "حدث خطأ أثناء تعديل المنتج",
+      );
+    }
   };
 
   /* ==========================================
-     Cancel Editing
+     Cancel Edit
   ========================================== */
 
   const cancelEdit = () => {
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
+
       setPreviewUrl("");
     }
 
     resetEdit();
   };
 
-  /* ==========================================
-     Reset Edit State
-  ========================================== */
 
   const resetEdit = () => {
     setEditingId(null);
@@ -264,43 +216,41 @@ const Products = () => {
     setEditions(emptyEditForm);
   };
 
-  /* ==========================================
-     Product Details
-  ========================================== */
 
   const viewProduct = (productId) => {
     navigate(`/Pharmacy/home/products/${productId}`);
   };
 
-  /* ==========================================
-     Search
-  ========================================== */
-
   const filteredProducts = products.filter((product) => {
     const search = searchTerm.toLowerCase().trim();
 
     return (
-      product.name.toLowerCase().includes(search) ||
-      product.category.toLowerCase().includes(search) ||
-      product.description.toLowerCase().includes(search)
+      product.name?.toLowerCase().includes(search) ||
+      product.category?.name?.toLowerCase().includes(search) ||
+      product.description?.toLowerCase().includes(search)
     );
   });
 
-  /*
-    إذا خرجنا من الصفحة وفيه preview
-    غير مستخدم، نحاول تنظيفه.
-  */
+  /* ==========================================
+     Cleanup Preview
+  ========================================== */
 
   useEffect(() => {
     return () => {
-      if (previewUrl && editions.image instanceof File) {
+      if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
       }
     };
   }, [previewUrl]);
 
+
+  if (loading) {
+    return <Loading text="جاري تحميل المنتجات..." />;
+  }
+
   return (
     <div className="prd-div">
+
       <div className="prd-header">
         <h3>المنتجات</h3>
 
@@ -346,11 +296,7 @@ const Products = () => {
 
                 return (
                   <tr key={product.id}>
-                    {/* ID */}
-
                     <td>{product.id}</td>
-
-                    {/* Name */}
 
                     <td>
                       {isEditing ? (
@@ -366,13 +312,11 @@ const Products = () => {
                       )}
                     </td>
 
-                    {/* Image */}
-
                     <td>
                       {isEditing ? (
                         <div className="edit-image-container">
                           <img
-                            src={previewUrl || product.image}
+                            src={previewUrl || product.image_url || panadol}
                             alt={product.name}
                             className="prd-img"
                           />
@@ -394,30 +338,14 @@ const Products = () => {
                         </div>
                       ) : (
                         <img
-                          src={product.image}
+                          src={product.image_url || panadol}
                           alt={product.name}
                           className="prd-img"
                         />
                       )}
                     </td>
 
-                    {/* Category */}
-
-                    <td>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          name="category"
-                          value={editions.category}
-                          onChange={handleEditChange}
-                          className="edit-input"
-                        />
-                      ) : (
-                        product.category
-                      )}
-                    </td>
-
-                    {/* Description */}
+                    <td>{product.category?.name || "-"}</td>
 
                     <td>
                       {isEditing ? (
@@ -428,11 +356,9 @@ const Products = () => {
                           className="edit-input edit-description"
                         />
                       ) : (
-                        product.description
+                        product.description || "-"
                       )}
                     </td>
-
-                    {/* Price */}
 
                     <td>
                       {isEditing ? (
@@ -440,6 +366,7 @@ const Products = () => {
                           type="number"
                           name="price"
                           min="0"
+                          step="0.01"
                           value={editions.price}
                           onChange={handleEditChange}
                           className="edit-input"
@@ -448,8 +375,6 @@ const Products = () => {
                         `${product.price} ل.س`
                       )}
                     </td>
-
-                    {/* Quantity */}
 
                     <td>
                       {isEditing ? (
@@ -466,51 +391,31 @@ const Products = () => {
                       )}
                     </td>
 
-                    {/* Prescription */}
-
                     <td>
                       {isEditing ? (
                         <label className="checkbox-edit">
                           <input
                             type="checkbox"
-                            name="is_requires_prescription"
-                            checked={editions.is_requires_prescription}
+                            name="is_required_prescription"
+                            checked={editions.is_required_prescription}
                             onChange={handleEditChange}
                           />
 
                           <span>يتطلب وصفة</span>
                         </label>
-                      ) : product.is_requires_prescription ? (
+                      ) : product.is_required_prescription ? (
                         "نعم"
                       ) : (
                         "لا"
                       )}
                     </td>
 
-                    {/* Status */}
-
                     <td>
-                      {isEditing ? (
-                        <select
-                          name="status"
-                          value={editions.status}
-                          onChange={handleEditChange}
-                          className="edit-input"
-                        >
-                          <option value="متوفر">متوفر</option>
-
-                          <option value="كمية قليلة">كمية قليلة</option>
-
-                          <option value="غير متوفر">غير متوفر</option>
-                        </select>
-                      ) : (
-                        <span className={`status status-${product.status}`}>
-                          {product.status}
-                        </span>
-                      )}
+                      <span className={`status status-${product.stock_status}`}>
+                        {product.stock_status_label}
+                      </span>
                     </td>
 
-                    {/* Edit / Save */}
 
                     <td>
                       {isEditing ? (
@@ -542,7 +447,7 @@ const Products = () => {
                         </button>
                       )}
                     </td>
-                    {/* Details */}
+
                     <td>
                       <button
                         type="button"
