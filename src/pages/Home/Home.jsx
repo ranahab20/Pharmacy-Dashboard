@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Home.css";
 import Card from "../../components/Card/Card";
 import { IoPeople } from "react-icons/io5";
@@ -8,17 +8,34 @@ import { GiMoneyStack } from "react-icons/gi";
 import ProductPieChart from "../../components/ProductPieChart/ProductPieChart";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import SalesBarChart from "../../components/SalesBarChart/SalesBarChart";
+import api from "../../api/axiosInstance";
 
 const Home = () => {
-  const customersData = [
-    { value: 120 },
-    { value: 140 },
-    { value: 130 },
-    { value: 170 },
-    { value: 190 },
-    { value: 220 },
-    { value: 247 },
-  ];
+  const [loading, setLoading] = useState(true);
+  const [dashboardData, setDashboardData] = useState({
+    today_orders: 0,
+    total_orders: 0,
+    available_products: 0,
+    customers_count: 0,
+    sales_last_7_days: [],
+    top_products: [],
+  });
+
+  useEffect(() => {
+    const fetchHome = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get("/dashboard");
+        console.log("Cards", response.data);
+        setDashboardData(response.data);
+      } catch (error) {
+        console.error("Error fetching dashboard:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHome();
+  }, []);
   return (
     <>
       <div className="container-home">
@@ -27,9 +44,14 @@ const Home = () => {
           <h3>لنخبرك بعملك اليوم</h3>
         </header>
         <div className="card-div">
-          <Card title="العملاء" data="247" icon={<IoPeople />} className="crd1">
+          <Card
+            title="العملاء"
+            data={dashboardData.customers_count}
+            icon={<IoPeople />}
+            className="crd1"
+          >
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={customersData}>
+          
                 <Area
                   type="monotone"
                   dataKey="value"
@@ -37,17 +59,17 @@ const Home = () => {
                   fill="#f4df91"
                   strokeWidth={2}
                 />
-              </AreaChart>
+              
             </ResponsiveContainer>
           </Card>
           <Card
             title="الأدوية المتوفرة"
-            data="247"
+            data={dashboardData.available_products}
             icon={<GiMedicines />}
             className="crd2"
           >
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={customersData}>
+              
                 <Area
                   type="monotone"
                   dataKey="value"
@@ -55,17 +77,17 @@ const Home = () => {
                   fill="#d58383"
                   strokeWidth={2}
                 />
-              </AreaChart>
+              
             </ResponsiveContainer>
           </Card>
           <Card
             title="إجمالي الطلبات"
-            data="247"
+            data={dashboardData.total_orders}
             icon={<FaClipboardList />}
             className="crd3"
           >
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={customersData}>
+             
                 <Area
                   type="monotone"
                   dataKey="value"
@@ -73,17 +95,17 @@ const Home = () => {
                   fill="rgb(150, 230, 239)"
                   strokeWidth={2}
                 />
-              </AreaChart>
+              
             </ResponsiveContainer>
           </Card>
           <Card
-            title="طلبات اليوم"
-            data="247"
+            title="إجمالي الطلبات المكتملة"
+            data={dashboardData.today_orders}
             icon={<GiMoneyStack />}
             className="crd4"
           >
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={customersData}>
+             
                 <Area
                   type="monotone"
                   dataKey="value"
@@ -91,16 +113,16 @@ const Home = () => {
                   fill="rgb(115, 168, 131)"
                   strokeWidth={2}
                 />
-              </AreaChart>
+              
             </ResponsiveContainer>
           </Card>
         </div>
         <div className="buttom-section">
           <div className="piechart">
-            <ProductPieChart/>
+            <ProductPieChart data={dashboardData.top_products} />
           </div>
           <div className="barchart">
-            <SalesBarChart/>
+            <SalesBarChart  data={dashboardData.sales_last_7_days} />
           </div>
         </div>
       </div>

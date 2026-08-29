@@ -11,16 +11,14 @@ import {
 
 import "./SalesBarChart.css";
 
-const SalesBarChart = () => {
-  const salesData = [
-    { day: "السبت", sales: 120 },
-    { day: "الأحد", sales: 180 },
-    { day: "الإثنين", sales: 150 },
-    { day: "الثلاثاء", sales: 220 },
-    { day: "الأربعاء", sales: 190 },
-    { day: "الخميس", sales: 250 },
-    { day: "الجمعة", sales: 210 },
-  ];
+const SalesBarChart = ({ data=[] }) => {
+  const salesData = data.map((item) => ({
+    day: new Date(`${item.date}T00:00:00`).toLocaleDateString("ar", {
+      weekday: "long",
+    }),
+
+    sales: item.quantity,
+  }));
 
   return (
     <div className="sales-chart">
@@ -28,7 +26,7 @@ const SalesBarChart = () => {
 
       <ResponsiveContainer width="100%" height={250}>
         <BarChart
-          data={salesData}
+          data={data}
           margin={{
             top: 10,
             right: 10,
@@ -38,14 +36,14 @@ const SalesBarChart = () => {
         >
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
 
-          <XAxis dataKey="day" tick={{ fontSize: 12 }} />
+          <XAxis dataKey="data" tick={{ fontSize: 12 }} />
 
           <YAxis tick={{ fontSize: 12 }} />
 
           <Tooltip />
 
           <Bar
-            dataKey="sales"
+            dataKey="quantity"
             fill="#2f4563"
             radius={[6, 6, 0, 0]}
             barSize={25}
