@@ -3,13 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import "./ProductDetails.css";
 import Loading from "../Loading/Loading";
+import api from "../../api/axiosInstance";
 
 const ProductDetails = () => {
   const { product_id } = useParams();
   const [loading, setLoading] = useState(true);
-  const products = [];
-  const product = products.find((item) => item.id === Number(product_id));
-
+  // const product = products.find((item) => item.id === Number(product_id));
+  const [products, setProducts] = useState(null);
   const navigate = useNavigate();
   const clickHandler = () => {
     navigate("/Pharmacy/home/products");
@@ -19,8 +19,11 @@ const ProductDetails = () => {
     const fetchProductDetails = async () => {
       try {
         setLoading(true);
-        const response = await api.get(`/products/${id}`, formData);
+        const response = await api.get(`/products/${product_id}`)
         console.log("Details", response.data.data);
+        setProducts(response.data.data);
+        console.log("Product:", response.data.data);
+console.log("Details:", response.data.data.details);
       } catch (error) {
         console.error("Error fetching stats:", error);
       } finally {
@@ -29,6 +32,10 @@ const ProductDetails = () => {
     };
     fetchProductDetails();
   }, []);
+
+  if (loading) {
+    return <Loading text="جاري تحميل تفاصيل المنتج..." />;
+  }
 
   return (
     <div className="prd-details-div">
@@ -43,30 +50,31 @@ const ProductDetails = () => {
       <div className="prd-summary-card">
         <div className="prd-image-box">
           <img
-            src={product?.image || "/path-to-panadol-image.png"}
-            alt="صورة المنتج"
+            src={products?.image_url || "/path-to-panadol-image.png"}
+            alt={products?.name || "صورة المنتج"}
           />
         </div>
 
         <div className="prd-basic-info">
-          <h2 className="prd-title">{product?.name || "بنادول"}</h2>
-          <span className="badge-status">غير متوفر</span>
-          <span className="badge-category">مسكنات</span>
+          <h2 className="prd-title">{products?.name || "بنادول"}</h2>
+          <span className="badge-status"> {products?.stock_status_label}</span>
+          <span className="badge-category"> {products?.category?.name}</span>
         </div>
 
         <div className="prd-info-item">
           <span className="info-label">🪙 السعر</span>
-          <span className="info-value">656 ل.س</span>
+          <span className="info-value"> {products?.price} ل.س</span>
         </div>
 
         <div className="prd-info-item">
           <span className="info-label">📦 الكمية المتوفرة</span>
-          <span className="info-value">0</span>
+          <span className="info-value">{products?.quantity}</span>
         </div>
 
         <div className="prd-info-item">
           <span className="info-label">📋 يتطلب وصفة</span>
-          <span className="check-icon">✔</span>
+          <span className="check-icon">{products?.is_required_prescription  ? "✔"
+              : "✖"}</span>
         </div>
       </div>
 
@@ -74,43 +82,38 @@ const ProductDetails = () => {
       <div className="prd-description">
         <div className="section-title">📋 وصف الدواء</div>
         <p className="section-text">
-          بنادول يستخدم لتخفيف الألم، وخفض الحرارة الناتجة عن نزلات البرد
-          والإنفلونزا والصداع وآلام الجسم.
+          {products?.description || "-"}
         </p>
 
         <div className="details-grid">
-          <div className="grid-item">
-            <div className="section-title">🩺 الجرعة وطريقة الاستخدام</div>
-            <p className="section-text">
-              البالغون والأطفال أكبر من 12 سنة : من قرص إلى قرصين كل 4 ساعات إلى
-              6 ساعات.
-            </p>
-          </div>
+          {products?.details?.map((detail) => (
+  <div className="grid-item" key={detail.id}>
 
-          <div className="grid-item">
-            <div className="section-title">🩺 الاستخدامات</div>
-            <p className="section-text">
-              تخفيف الصداع، خفض الحرارة، آلام العضلات وآلام الأسنان.
-            </p>
-          </div>
+    <div className="section-title">
 
-          <div className="grid-item">
-            <div className="section-title">🩺 الآثار الجانبية</div>
-            <p className="section-text">
-              طفح جلدي وألم معدي معوي لمن يعانون من حساسية ضد مادة السيتامول.
-            </p>
-          </div>
+      {detail.type === "warnings" && "❌ التحذيرات"}
 
-          <div className="grid-item">
-            <div className="section-title">❌ التحذيرات</div>
-            <p className="section-text">
-              لا يستخدم لمن يعانون من حساسية ضد مادة السيتامول.
-            </p>
-          </div>
-        </div>
-      </div>
+      {detail.type === "usage_method" &&
+        "🩺 الجرعة وطريقة الاستخدام"}
+
+      {detail.type === "indications" &&
+        "🩺 الاستخدامات"}
+
+      {detail.type === "side_effects" &&
+        "🩺 الآثار الجانبية"}
+
     </div>
-  );
-};
+
+    <p className="section-text">
+      {detail.content}
+    </p>
+</div>
+ 
+))}
+</div>
+    </div>
+  </div>);}
+
+
 
 export default ProductDetails;

@@ -43,7 +43,7 @@ function App() {
           element: <Products />,
         },
         {
-          path: "products/:productId",
+          path: "products/:product_id",
           element: <ProductDetails />,
         },
         {

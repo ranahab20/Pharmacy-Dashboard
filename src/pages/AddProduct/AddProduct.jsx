@@ -79,6 +79,9 @@ const AddProduct = () => {
       if (formData.image) {
         data.append("image", formData.image);
       }
+      for (const [key, value] of data.entries()) {
+  console.log(key, value);
+}
 
       console.log("Form data before send:", formData);
 
