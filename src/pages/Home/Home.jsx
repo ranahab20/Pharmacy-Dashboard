@@ -14,9 +14,17 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState({
     today_orders: 0,
+    today_orders_trend: [],
+
     total_orders: 0,
+    total_orders_trend: [],
+
     available_products: 0,
+    available_products_trend: [],
+
     customers_count: 0,
+    customers_trend: [],
+
     sales_last_7_days: [],
     top_products: [],
   });
@@ -51,15 +59,15 @@ const Home = () => {
             className="crd1"
           >
             <ResponsiveContainer width="100%" height="100%">
-          
+              <AreaChart data={dashboardData.customers_trend}>
                 <Area
                   type="monotone"
-                  dataKey="value"
+                  dataKey="count"
                   stroke="#d9a400"
                   fill="#f4df91"
                   strokeWidth={2}
                 />
-              
+              </AreaChart>
             </ResponsiveContainer>
           </Card>
           <Card
@@ -69,15 +77,15 @@ const Home = () => {
             className="crd2"
           >
             <ResponsiveContainer width="100%" height="100%">
-              
+              <AreaChart data={dashboardData.available_products_trend}>
                 <Area
                   type="monotone"
-                  dataKey="value"
+                  dataKey="count"
                   stroke="#d62c2c"
                   fill="#d58383"
                   strokeWidth={2}
                 />
-              
+              </AreaChart>
             </ResponsiveContainer>
           </Card>
           <Card
@@ -87,15 +95,15 @@ const Home = () => {
             className="crd3"
           >
             <ResponsiveContainer width="100%" height="100%">
-             
+              <AreaChart data={dashboardData.total_orders_trend}>
                 <Area
                   type="monotone"
-                  dataKey="value"
+                  dataKey="count"
                   stroke="rgb(65, 227, 242)"
                   fill="rgb(150, 230, 239)"
                   strokeWidth={2}
                 />
-              
+              </AreaChart>
             </ResponsiveContainer>
           </Card>
           <Card
@@ -105,15 +113,15 @@ const Home = () => {
             className="crd4"
           >
             <ResponsiveContainer width="100%" height="100%">
-             
+              <AreaChart data={dashboardData.today_orders_trend}>
                 <Area
                   type="monotone"
-                  dataKey="value"
+                  dataKey="count"
                   stroke="rgb(12, 147, 53)"
                   fill="rgb(115, 168, 131)"
                   strokeWidth={2}
                 />
-              
+              </AreaChart>
             </ResponsiveContainer>
           </Card>
         </div>
@@ -122,7 +130,7 @@ const Home = () => {
             <ProductPieChart data={dashboardData.top_products} />
           </div>
           <div className="barchart">
-            <SalesBarChart  data={dashboardData.sales_last_7_days} />
+            <SalesBarChart data={dashboardData.sales_last_7_days} />
           </div>
         </div>
       </div>

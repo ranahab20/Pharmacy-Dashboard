@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import Input from "../../components/Input/Input";
 import Button from "../Button/Button";
-import axios from "axios";
 import "./UpLoadFile.css";
 import { BsCloudUpload } from "react-icons/bs";
 
-const UploadFile = ({children}) => {
+const UploadFile = ({ children, onFileSelect }) => {
   const [status, setStatus] = useState("idle");
   const [file, setFile] = useState(null);
   const [upLoadProgress, setUpUploadProgress] = useState(0);
@@ -16,40 +15,31 @@ const UploadFile = ({children}) => {
       setUpUploadProgress(0);
     }
   };
+  //
   const handleFileUpload = async () => {
     if (!file) return;
-    setStatus("uploading");
-
-    const formData = new FormData();
-    formData.append("file", file);
 
     try {
-      await axios.post("https://httpbin.org/post", formData, {
-        headers: {
-          "content-Type": "  multipart/form-data",
-        },
-        onUploadProgress: (ProgressEvent) => {
-          const progress = ProgressEvent.total
-            ? Math.round((ProgressEvent.loaded * 100) / ProgressEvent.total)
-            : 0;
-          setUpUploadProgress(progress);
-        },
-      });
+      setStatus("uploading");
+
+      // إرسال الملف إلى AddProduct
+      onFileSelect?.(file);
+
+      setUpUploadProgress(100);
       setStatus("success");
-    } catch {
+    } catch (error) {
+      console.error("Error selecting file:", error);
       setStatus("error");
     }
   };
   return (
     <div className="upload-container">
-     <p>{children}</p> 
+      <p>{children}</p>
       <div className="file-input-wrapper">
         <div className="upload-icon">
           <BsCloudUpload />
         </div>
-        <p id="upload-label">
-          {file ? "اختر صورة أخرى" : "اختر صورة المنتج"}
-        </p>
+        <p id="upload-label">{file ? "اختر صورة أخرى" : "اختر صورة المنتج"}</p>
         <Input type="file" accept="image/*" onChange={handleFileChange}>
           {" "}
         </Input>

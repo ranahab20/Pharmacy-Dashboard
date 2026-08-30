@@ -70,21 +70,28 @@ const Products = () => {
     }
   };
 
+   const deleteCat = async (id) => {
+    try {
+      const response = await api.delete(`/products/${id}`);
+      console.log("Delete response:", response.data);
+      toast.success(response.data.message);
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product.id !== id),
+      );
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  /* ==========================================
-     Add Product
-  ========================================== */
 
   const addHandler = () => {
     navigate("/Pharmacy/home/addProduct");
   };
 
-  /* ==========================================
-     Input Change
-  ========================================== */
 
   const handleEditChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -143,7 +150,6 @@ const Products = () => {
     }));
   };
 
- 
   const saveEdit = async (id) => {
     if (!editions.name.trim()) {
       return;
@@ -158,7 +164,6 @@ const Products = () => {
 
       formData.append("price", editions.price);
 
-
       formData.append("quantity", editions.quantity);
 
       formData.append(
@@ -171,7 +176,6 @@ const Products = () => {
       if (editions.image instanceof File) {
         formData.append("image", editions.image);
       }
-
 
       const response = await api.post(`/products/${id}`, formData);
 
@@ -209,13 +213,11 @@ const Products = () => {
     resetEdit();
   };
 
-
   const resetEdit = () => {
     setEditingId(null);
 
     setEditions(emptyEditForm);
   };
-
 
   const viewProduct = (productId) => {
     navigate(`/Pharmacy/home/products/${productId}`);
@@ -243,14 +245,12 @@ const Products = () => {
     };
   }, [previewUrl]);
 
-
   if (loading) {
     return <Loading text="جاري تحميل المنتجات..." />;
   }
 
   return (
     <div className="prd-div">
-
       <div className="prd-header">
         <h3>المنتجات</h3>
 
@@ -285,6 +285,7 @@ const Products = () => {
               <th>يتطلب وصفة</th>
               <th>الحالة</th>
               <th>تعديل</th>
+              <th>حذف</th>
               <th>التفاصيل</th>
             </tr>
           </thead>
@@ -416,7 +417,6 @@ const Products = () => {
                       </span>
                     </td>
 
-
                     <td>
                       {isEditing ? (
                         <div className="edit-actions">
@@ -446,6 +446,14 @@ const Products = () => {
                           ✏️
                         </button>
                       )}
+                    </td>
+                    <td>
+                      <button
+                        className="delete-btn"
+                        onClick={() => deleteCat(product.id)}
+                      >
+                        🗑️
+                      </button>
                     </td>
 
                     <td>
