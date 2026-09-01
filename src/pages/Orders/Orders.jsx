@@ -1,82 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./Orders.css";
 import { IoEyeOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-
-const initialOrders = [
-  {
-    id: 1,
-    customer: "أحمد محمد",
-    orderDate: "2026-08-10",
-    completionDate: "2026-08-10",
-    amount: 45000,
-    status: "delivered",
-    deliveryAgent: "محمد علي",
-  },
-  {
-    id: 2,
-    customer: "سارة أحمد",
-    orderDate: "2026-08-11",
-    completionDate: "2026-08-11",
-    amount: 75000,
-    status: "delivered",
-    deliveryAgent: "خالد حسن",
-  },
-  {
-    id: 3,
-    customer: "ليان خالد",
-    orderDate: "2026-08-12",
-    completionDate: null,
-    amount: 32000,
-    status: "pending",
-    deliveryAgent: "لم يتم التعيين",
-  },
-  {
-    id: 4,
-    customer: "عمر إبراهيم",
-    orderDate: "2026-08-12",
-    completionDate: null,
-    amount: 58000,
-    status: "on_delivery",
-    deliveryAgent: "أحمد سامر",
-  },
-  {
-    id: 5,
-    customer: "نور محمد",
-    orderDate: "2026-08-13",
-    completionDate: "2026-08-13",
-    amount: 27000,
-    status: "delivered",
-    deliveryAgent: "محمد علي",
-  },
-  {
-    id: 6,
-    customer: "ريم أحمد",
-    orderDate: "2026-08-13",
-    completionDate: null,
-    amount: 91000,
-    status: "on_delivery",
-    deliveryAgent: "خالد حسن",
-  },
-  {
-    id: 7,
-    customer: "يوسف خالد",
-    orderDate: "2026-08-14",
-    completionDate: null,
-    amount: 15000,
-    status: "rejected",
-    deliveryAgent: "لم يتم التعيين",
-  },
-  {
-    id: 8,
-    customer: "جنى علي",
-    orderDate: "2026-08-14",
-    completionDate: "2026-08-14",
-    amount: 63000,
-    status: "accepted",
-    deliveryAgent: "أحمد سامر",
-  },
-];
+import api from "../../api/axiosInstance";
+import Loading from "../Loading/Loading";
 
 const statusVar = (order) => {
   return order.status === "pending"
@@ -105,18 +32,42 @@ const getStatusLabel = (status) => {
 };
 
 const Orders = () => {
-  const [orders] = useState(initialOrders);
-
+  const [orders, setOrders] = useState([]);
+  const[loading,setLoading]=useState(true)
   const navigate = useNavigate();
 
   const viewOrder = (orderId) => {
     navigate(`/Pharmacy/home/orders/${orderId}`);
   };
 
+    useEffect(() => {
+      const fetchOrders = async () => {
+        try {
+          setLoading(true);
+          const response = await api.get("/orders?status=pending");
+
+          console.log("Orders:", response.data);
+
+          setOrders(response.data.data);
+
+        } catch (error) {
+          console.error("Error fetching orders:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchOrders();
+    }, []);
+  
+
+  if (loading) {
+  return <Loading text="جاري تحميل الطلبات..." />;
+}
+
   return (
     <div className="ord-div">
       <div className="ord-header">كل الطلبات</div>
-
       <div className="search-ord">
         <input type="text" placeholder="بحث عن .." className="search" />
       </div>
@@ -141,13 +92,13 @@ const Orders = () => {
               <tr key={order.id}>
                 <td>{order.id}</td>
 
-                <td>{order.customer}</td>
+                <td>{order.user_id}</td>
 
-                <td>{order.orderDate}</td>
+                <td>{order.assigned_at}</td>
 
-                <td>{order.completionDate || "-"}</td>
+                <td>{order.delivered_at || "-"}</td>
 
-                <td>{order.amount}</td>
+                <td>{order.total_price}</td>
 
                 <td className="ord-status">
                   <span className={statusVar(order)}>
@@ -155,7 +106,7 @@ const Orders = () => {
                   </span>
                 </td>
 
-                <td>{order.deliveryAgent}</td>
+                <td>{order.delivery_id}</td>
 
                 <td>
                   <button
