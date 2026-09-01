@@ -148,6 +148,7 @@ const Categories = () => {
       );
     } catch (error) {
       console.error("Error deleting category:", error);
+      toast.error(error.response?.data?.message);
     }
   };
 if (loading) {
