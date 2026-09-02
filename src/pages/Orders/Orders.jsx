@@ -44,7 +44,7 @@ const Orders = () => {
       const fetchOrders = async () => {
         try {
           setLoading(true);
-          const response = await api.get("/orders?status=pending");
+          const response = await api.get("/orders");
 
           console.log("Orders:", response.data);
 
@@ -92,7 +92,7 @@ const Orders = () => {
               <tr key={order.id}>
                 <td>{order.id}</td>
 
-                <td>{order.user_id}</td>
+                <td>{order.user?.name}</td>
 
                 <td>{order.assigned_at}</td>
 

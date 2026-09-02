@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import Button from "../../components/Button/Button";
+import Loading from "../Loading/Loading";
 
 import {
   FaChevronLeft,
@@ -16,208 +18,159 @@ import panadol from "../../assets/panadol.png";
 
 import "./OrderDetails.css";
 
-const USE_DUMMY_DATA = true;
-
-const dummyOrder = {
-  id: 1,
-
-  status: "pending",
-
-  created_at: "2026-08-22 11:15",
-
-  total: 1600,
-
-  delivery_price: 200,
-
-  customer: {
-    id: 1,
-    name: "محمد علي أحمد",
-  },
-
-  delivery_agent: {
-    id: 2,
-    name: "محمد علي",
-  },
-
-  delivery_id: 2,
-
-  address: {
-    city: "الحمدانية",
-    details: "أمام جامع الصديق",
-  },
-
-  prescription: {
-    image: panadol,
-  },
-
-  products: [
-    {
-      id: 1,
-      name: "Panadol",
-      image: panadol,
-      price: 656,
-      quantity: 1,
-      subtotal: 656,
-      requires_prescription: false,
-    },
-
-    {
-      id: 2,
-      name: "Panadol Extra",
-      image: panadol,
-      price: 250,
-      quantity: 2,
-      subtotal: 500,
-      requires_prescription: true,
-    },
-
-    {
-      id: 3,
-      name: "Panadol Cold",
-      image: panadol,
-      price: 148,
-      quantity: 3,
-      subtotal: 444,
-      requires_prescription: false,
-    },
-  ],
-};
-
-const dummyDrivers = [
-  {
-    id: 1,
-    name: "أحمد محمد",
-  },
-
-  {
-    id: 2,
-    name: "محمد علي",
-  },
-
-  {
-    id: 3,
-    name: "خالد حسن",
-  },
-];
+import api from "../../api/axiosInstance";
 
 const OrderDetails = () => {
-  const { orderId } = useParams();
+  const { order_id } = useParams();
 
   const navigate = useNavigate();
 
-  const [order, setOrder] = useState(USE_DUMMY_DATA ? dummyOrder : null);
+  /* =========================================
+     STATES
+  ========================================= */
 
-  const [drivers, setDrivers] = useState(USE_DUMMY_DATA ? dummyDrivers : []);
+  const [order, setOrder] = useState(null);
 
-  const [selectedDriver, setSelectedDriver] = useState(
-    dummyOrder.delivery_id ? String(dummyOrder.delivery_id) : "",
-  );
+  const [drivers, setDrivers] = useState([]);
 
-  const [loading, setLoading] = useState(false);
+  const [selectedDriver, setSelectedDriver] = useState("");
+
+  /*
+    هذا الـ state يعني أن المستخدم
+    اختار سائقاً وضغط "تعيين العامل"
+
+    لكنه لم يُرسل للباك بعد.
+  */
+  const [driverReady, setDriverReady] = useState(false);
+
+  const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
 
   const [updating, setUpdating] = useState(false);
 
-  // ================================
-  // REJECTION MODAL
-  // ================================
+  /* =========================================
+     REJECTION MODAL
+  ========================================= */
 
   const [showRejectModal, setShowRejectModal] = useState(false);
 
   const [rejectionReason, setRejectionReason] = useState("");
 
   const rejectionReasons = [
-    "الوصفة الطبية غير مطابقة",
-    "الوصفة الطبية غير واضحة",
-
+    {
+      value: "prescription_mismatch",
+      label: "الوصفة الطبية غير مطابقة",
+    },
   ];
 
-  // ================================
-  // FETCH ORDER
-  // ================================
+  /* =========================================
+     FETCH ORDER
+  ========================================= */
+
+  const fetchOrder = async () => {
+    try {
+      setLoading(true);
+
+      setError("");
+
+      const response = await api.get(`/orders/${order_id}`);
+
+      console.log("Order Details:", response.data.data);
+
+      const orderData = response.data.data;
+
+      setOrder(orderData);
+
+      /*
+        إذا كان الطلب لديه سائق
+        من قبل، نخزن id الخاص به.
+      */
+
+      if (orderData.delivery_id) {
+        setSelectedDriver(String(orderData.delivery_id));
+      }
+    } catch (error) {
+      console.error("Error fetching order:", error);
+
+      setError(
+        error.response?.data?.message || "حدث خطأ أثناء جلب تفاصيل الطلب",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (USE_DUMMY_DATA) {
-      return;
-    }
+    fetchOrder();
+  }, [order_id]);
 
-    const fetchOrder = async () => {
+  useEffect(() => {
+    const fetchDrivers = async () => {
       try {
-        setLoading(true);
+        const response = await api.get("/deliveries");
 
-        /*
-        const response = await axios.get(
-          `http://localhost:8000/api/orders/${orderId}`
+        console.log("Drivers:", response.data.data);
+
+        // نعرض فقط السائقين المتاحين
+        const availableDrivers = response.data.data.filter(
+          (driver) => driver.is_available,
         );
 
-        setOrder(response.data);
-        */
+        setDrivers(availableDrivers);
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching drivers:", error);
 
-        setError("حدث خطأ أثناء جلب تفاصيل الطلب");
-      } finally {
-        setLoading(false);
+        toast.error(
+          error.response?.data?.message || "تعذر تحميل مندوبي التوصيل",
+        );
       }
     };
 
-    fetchOrder();
-  }, [orderId]);
+    fetchDrivers();
+  }, []);
 
-  // ================================
-  // BACK
-  // ================================
+  /* =========================================
+     BACK
+  ========================================= */
 
   const backToOrders = () => {
     navigate("/Pharmacy/home/orders");
   };
 
-  // ================================
-  // UPDATE STATUS
-  // ================================
+  /* =========================================
+     ACCEPT ORDER
+     POST /orders/:id/accept
+  ========================================= */
 
-  const updateOrderStatus = async (newStatus) => {
-    if (USE_DUMMY_DATA) {
-      setOrder((prev) => ({
-        ...prev,
-        status: newStatus,
-      }));
-
-      return;
-    }
-
+  const acceptOrder = async () => {
     try {
       setUpdating(true);
 
-      /*
-      const response = await axios.patch(
-        `http://localhost:8000/api/orders/${orderId}`,
-        {
-          status: newStatus,
-        }
-      );
+      const response = await api.post(`/orders/${order_id}/accept`);
 
-      setOrder(response.data);
+      console.log("Accept response:", response.data);
+
+      toast.success(response.data.message || "تم قبول الطلب بنجاح");
+
+      /*
+        نجلب الطلب من جديد
+        للحصول على status = accepted
       */
+
+      await fetchOrder();
     } catch (error) {
-      console.error(error);
+      console.error("Error accepting order:", error);
+
+      toast.error(error.response?.data?.message || "حدث خطأ أثناء قبول الطلب");
     } finally {
       setUpdating(false);
     }
   };
 
-  // ================================
-  // ACCEPT ORDER
-  // ================================
-
-  const acceptOrder = () => {
-    updateOrderStatus("accepted");
-  };
-
-  // ================================
-  // OPEN REJECT MODAL
-  // ================================
+  /* =========================================
+     OPEN REJECT MODAL
+  ========================================= */
 
   const openRejectModal = () => {
     setRejectionReason("");
@@ -225,120 +178,167 @@ const OrderDetails = () => {
     setShowRejectModal(true);
   };
 
-  // ================================
-  // CANCEL REJECTION
-  // ================================
+  /* =========================================
+     CANCEL REJECT
+  ========================================= */
 
   const cancelReject = () => {
     setShowRejectModal(false);
 
     setRejectionReason("");
-
-    // لا نغير حالة الطلب
-    // ستبقى pending
   };
 
-  // ================================
-  // CONFIRM REJECTION
-  // ================================
+  /* =========================================
+     REJECT ORDER
+     POST /orders/:id/reject
+  ========================================= */
 
   const confirmReject = async () => {
     if (!rejectionReason) {
-      alert("يرجى اختيار سبب الرفض");
+      toast.error("يرجى اختيار سبب الرفض");
 
       return;
     }
 
-    // Dummy data
-    if (USE_DUMMY_DATA) {
-      setOrder((prev) => ({
-        ...prev,
-
-        status: "rejected",
-
-        rejection_reason: rejectionReason,
-      }));
-
-      setShowRejectModal(false);
-
-      setRejectionReason("");
-
-      return;
-    }
-
-    // Backend
     try {
       setUpdating(true);
 
-      /*
-      const response = await axios.patch(
-        `http://localhost:8000/api/orders/${orderId}`,
-        {
-          status: "rejected",
-          rejection_reason: rejectionReason,
-        }
-      );
+      const response = await api.post(`/orders/${order_id}/reject`, {
+        rejection_reason: rejectionReason,
+      });
 
-      setOrder(response.data);
-      */
+      console.log("Reject response:", response.data);
+
+      toast.success(response.data.message || "تم رفض الطلب بنجاح");
 
       setShowRejectModal(false);
 
       setRejectionReason("");
+
+      /*
+        نجلب الطلب بعد الرفض
+        حتى تصبح الحالة rejected
+      */
+
+      await fetchOrder();
     } catch (error) {
       console.error("Error rejecting order:", error);
+
+      toast.error(error.response?.data?.message || "حدث خطأ أثناء رفض الطلب");
     } finally {
       setUpdating(false);
     }
   };
 
-  // ================================
-  // ASSIGN DRIVER
-  // ================================
+  /* =========================================
+     PRESCRIPTION
+  ========================================= */
+
+  const hasPrescription = Boolean(
+    order?.prescription_id || order?.prescription,
+  );
+
+  /* =========================================
+     SELECT DRIVER LOCALLY
+  ========================================= */
 
   const assignDriver = () => {
     if (!selectedDriver) {
-      alert("يرجى اختيار عامل التوصيل");
+      toast.error("يرجى اختيار عامل التوصيل");
 
       return;
     }
 
-    const driver = drivers.find((item) => item.id === Number(selectedDriver));
+    /*
+      لا نرسل API هنا.
 
-    setOrder((prev) => ({
-      ...prev,
+      فقط نقول إن المستخدم
+      أكد اختيار السائق.
+    */
 
-      delivery_id: Number(selectedDriver),
+    setDriverReady(true);
 
-      delivery_agent: driver,
-    }));
+    toast.success("تم اختيار عامل التوصيل");
   };
 
-  // ================================
-  // START DELIVERY
-  // ================================
+  /* =========================================
+     START DELIVERY
 
-  const startDelivery = () => {
+     هنا نستدعي:
+     POST /orders/:id/assign-delivery
+  ========================================= */
+
+  const startDelivery = async () => {
     if (!selectedDriver) {
-      alert("يرجى اختيار عامل التوصيل أولاً");
+      toast.error("يرجى اختيار عامل التوصيل أولاً");
 
       return;
     }
 
-    updateOrderStatus("on_delivery");
+    try {
+      setUpdating(true);
+
+      const response = await api.post(`/orders/${order_id}/assign-delivery`, {
+        delivery_id: Number(selectedDriver),
+      });
+
+      console.log("Assign Delivery Response:", response.data);
+
+      toast.success(response.data.message || "تم بدء التوصيل بنجاح");
+
+      /*
+        بعد نجاح assign-delivery
+        نعيد جلب الطلب.
+
+        الباك يجب أن يعيد الحالة
+        الجديدة on_delivery.
+      */
+
+      await fetchOrder();
+
+      setDriverReady(false);
+    } catch (error) {
+      console.error("Error assigning delivery:", error);
+
+      toast.error(error.response?.data?.message || "تعذر بدء التوصيل");
+    } finally {
+      setUpdating(false);
+    }
   };
 
-  // ================================
-  // COMPLETE ORDER
-  // ================================
+  /* =========================================
+     MARK DELIVERED
 
-  const completeOrder = () => {
-    updateOrderStatus("delivered");
+     POST /orders/:id/mark-delivered
+  ========================================= */
+
+  const completeOrder = async () => {
+    try {
+      setUpdating(true);
+
+      const response = await api.post(`/orders/${order_id}/mark-delivered`);
+
+      console.log("Mark delivered response:", response.data);
+
+      toast.success(response.data.message || "تم تأكيد تسليم الطلب");
+
+      /*
+        تحديث الطلب بعد التسليم
+      */
+
+      await fetchOrder();
+    } catch (error) {
+      console.error("Error marking delivered:", error);
+
+      toast.error(error.response?.data?.message || "تعذر تأكيد تسليم الطلب");
+    } finally {
+      setUpdating(false);
+    }
   };
 
-  // ================================
-  // STATUS LABEL
-  // ================================
+  /* =========================================
+     STATUS LABEL
+  ========================================= */
 
   const getStatusLabel = (status) => {
     switch (status) {
@@ -362,12 +362,12 @@ const OrderDetails = () => {
     }
   };
 
-  // ================================
-  // LOADING
-  // ================================
+  /* =========================================
+     LOADING / ERROR
+  ========================================= */
 
   if (loading) {
-    return <div className="order-message">جاري تحميل تفاصيل الطلب...</div>;
+    return <Loading text="جاري تحميل تفاصيل الطلب..." />;
   }
 
   if (error) {
@@ -378,11 +378,30 @@ const OrderDetails = () => {
     return <div className="order-message">الطلب غير موجود</div>;
   }
 
+  /* =========================================
+     هل يمكن بدء التوصيل؟
+  ========================================= */
+
+  /*
+    بدون وصفة:
+    pending + تم اختيار سائق
+
+    مع وصفة:
+    accepted + تم اختيار سائق
+  */
+
+  const canStartDelivery =
+    driverReady &&
+    ((!hasPrescription && order.status === "pending") ||
+      (hasPrescription && order.status === "accepted"));
+
+  /* =========================================
+     UI
+  ========================================= */
+
   return (
     <>
       <div className="order-details-div">
-        {/* ================= HEADER ================= */}
-
         <div className="order-details-header">
           <h3>تفاصيل الطلب :</h3>
 
@@ -392,8 +411,6 @@ const OrderDetails = () => {
           </Button>
         </div>
 
-        {/* ================= SUMMARY ================= */}
-
         <div className="order-summary-card">
           <div className="order-main-info">
             <h3>رقم الطلب: {order.id}</h3>
@@ -402,7 +419,11 @@ const OrderDetails = () => {
               {getStatusLabel(order.status)}
             </span>
 
-            <p>{order.created_at}</p>
+            <p>
+              {order.created_at
+                ? new Date(order.created_at).toLocaleString("ar")
+                : "-"}
+            </p>
           </div>
 
           <div className="summary-item">
@@ -411,7 +432,7 @@ const OrderDetails = () => {
               العميل
             </div>
 
-            <strong>{order.customer?.name}</strong>
+            <strong>{order.user?.name || "-"}</strong>
           </div>
 
           <div className="summary-item">
@@ -420,7 +441,11 @@ const OrderDetails = () => {
               عامل التوصيل
             </div>
 
-            <strong>{order.delivery_agent?.name || "لم يتم التعيين"}</strong>
+            <strong>
+              {order.delivery
+                ? `مندوب #${order.delivery.id}`
+                : "لم يتم التعيين"}
+            </strong>
           </div>
 
           <div className="summary-item">
@@ -429,22 +454,15 @@ const OrderDetails = () => {
               يتطلب وصفة
             </div>
 
-            <strong className={order.prescription ? "requires-rx" : "no-rx"}>
-              {order.prescription ? "نعم" : "لا"}
+            <strong className={hasPrescription ? "requires-rx" : "no-rx"}>
+              {hasPrescription ? "نعم" : "لا"}
             </strong>
           </div>
         </div>
 
-        {/* ================= MAIN ================= */}
-
         <div className="order-content">
-          {/* PRODUCTS */}
-
           <div className="order-products">
-            <div className="products-title">
-              المنتجات المطلوبة
-              <span>({order.products.length})</span>
-            </div>
+            <div className="products-title">المنتجات المطلوبة</div>
 
             <table>
               <thead>
@@ -458,28 +476,38 @@ const OrderDetails = () => {
               </thead>
 
               <tbody>
-                {order.products.map((product) => (
-                  <tr key={product.id}>
+                {order.order_items?.map((item) => (
+                  <tr key={item.id}>
                     <td>
                       <div className="order-product">
-                        <img src={product.image} alt={product.name} />
+                        <img
+                          src={item.product?.image_url || panadol}
+                          alt={item.product?.name || "صورة المنتج"}
+                        />
 
-                        <span>{product.name}</span>
+                        <span>
+                          {item.product?.name || `منتج #${item.product_id}`}
+                        </span>
                       </div>
                     </td>
 
-                    <td>{product.price} ل.س</td>
+                    <td>{item.price} ل.س</td>
 
-                    <td>{product.quantity}</td>
+                    <td>{item.quantity}</td>
 
-                    <td>{product.subtotal} ل.س</td>
+                    <td>
+                      {(Number(item.price) * Number(item.quantity)).toFixed(2)}{" "}
+                      ل.س
+                    </td>
 
                     <td
                       className={
-                        product.requires_prescription ? "requires-rx" : "no-rx"
+                        item.product?.is_required_prescription
+                          ? "requires-rx"
+                          : "no-rx"
                       }
                     >
-                      {product.requires_prescription ? "نعم" : "لا"}
+                      {item.product?.is_required_prescription ? "نعم" : "لا"}
                     </td>
                   </tr>
                 ))}
@@ -496,13 +524,10 @@ const OrderDetails = () => {
               <div>
                 <span>الإجمالي الكلي :</span>
 
-                <strong>{order.total} ل.س</strong>
+                <strong>{order.total_price} ل.س</strong>
               </div>
-
             </div>
           </div>
-
-          {/* ================= SIDE ================= */}
 
           <div className="order-side-info">
             <div className="order-info-card">
@@ -511,14 +536,10 @@ const OrderDetails = () => {
                 عنوان التوصيل
               </h4>
 
-              <p>{order.address?.city}</p>
-
-              <p>{order.address?.details}</p>
+              <p>{order.address || "-"}</p>
             </div>
 
-            {/* DRIVER */}
-
-            {order.status === "accepted" && (
+            {(order.status === "pending" || order.status === "accepted") && (
               <div className="order-info-card">
                 <h4>
                   <FaTruck />
@@ -528,7 +549,17 @@ const OrderDetails = () => {
                 <select
                   className="driver-select"
                   value={selectedDriver}
-                  onChange={(e) => setSelectedDriver(e.target.value)}
+                  onChange={(e) => {
+                    setSelectedDriver(e.target.value);
+
+                    /*
+                      إذا غيّر المستخدم السائق
+                      بعد تأكيده، نعيد
+                      driverReady إلى false.
+                    */
+
+                    setDriverReady(false);
+                  }}
                 >
                   <option value="">اختر عامل التوصيل</option>
 
@@ -539,13 +570,15 @@ const OrderDetails = () => {
                   ))}
                 </select>
 
-                <Button className="assign-driver-btn" onClick={assignDriver}>
+                <Button
+                  className="assign-driver-btn"
+                  onClick={assignDriver}
+                  disabled={!selectedDriver || updating}
+                >
                   تعيين العامل
                 </Button>
               </div>
             )}
-
-            {/* STATUS */}
 
             <div className="order-info-card">
               <h4>تحديث حالة الطلب</h4>
@@ -577,33 +610,41 @@ const OrderDetails = () => {
                 </div>
               </div>
 
-              {order.status === "accepted" && (
-                <Button className="update-status-btn" onClick={startDelivery}>
-                  بدء التوصيل
+              {canStartDelivery && (
+                <Button
+                  className="update-status-btn"
+                  onClick={startDelivery}
+                  disabled={updating}
+                >
+                  {updating ? "جاري بدء التوصيل..." : "بدء التوصيل"}
                 </Button>
               )}
 
               {order.status === "on_delivery" && (
-                <Button className="update-status-btn" onClick={completeOrder}>
-                  تأكيد التسليم
+                <Button
+                  className="update-status-btn"
+                  onClick={completeOrder}
+                  disabled={updating}
+                >
+                  {updating ? "جاري التأكيد..." : "تأكيد التسليم"}
                 </Button>
               )}
             </div>
           </div>
         </div>
 
-        {/* ================= PRESCRIPTION ================= */}
-
-        {order.prescription && (
+        {hasPrescription && (
           <div className="prescription-review">
             <h3>مراجعة الوصفة الطبية</h3>
 
             <div className="prescription-content">
-              <img
-                src={order.prescription.image}
-                alt="الوصفة الطبية"
-                className="prescription-image"
-              />
+              {order.prescription?.image_url && (
+                <img
+                  src={order.prescription.image_url}
+                  alt="الوصفة الطبية"
+                  className="prescription-image"
+                />
+              )}
 
               {order.status === "pending" && (
                 <div className="prescription-actions">
@@ -629,9 +670,9 @@ const OrderDetails = () => {
         )}
       </div>
 
-      {/* ===================================
+      {/* =========================================
           REJECTION MODAL
-      =================================== */}
+      ========================================= */}
 
       {showRejectModal && (
         <div className="reject-modal-overlay">
@@ -670,9 +711,9 @@ const OrderDetails = () => {
               >
                 <option value="">اختر سبب الرفض</option>
 
-                {rejectionReasons.map((rejection_reason, index) => (
-                  <option key={index} value={rejection_reason}>
-                    {rejection_reason}
+                {rejectionReasons.map((reason) => (
+                  <option key={reason.value} value={reason.value}>
+                    {reason.label}
                   </option>
                 ))}
               </select>
