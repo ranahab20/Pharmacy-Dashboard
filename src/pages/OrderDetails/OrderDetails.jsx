@@ -25,14 +25,9 @@ const OrderDetails = () => {
 
   const navigate = useNavigate();
 
-  /* =========================================
-     STATES
-  ========================================= */
 
   const [order, setOrder] = useState(null);
-
   const [drivers, setDrivers] = useState([]);
-
   const [selectedDriver, setSelectedDriver] = useState("");
 
   /*
@@ -130,9 +125,6 @@ const OrderDetails = () => {
     fetchDrivers();
   }, []);
 
-  /* =========================================
-     BACK
-  ========================================= */
 
   const backToOrders = () => {
     navigate("/Pharmacy/home/orders");
@@ -280,6 +272,7 @@ const OrderDetails = () => {
 
       const response = await api.post(`/orders/${order_id}/assign-delivery`, {
         delivery_id: Number(selectedDriver),
+        // status: "on_delivery",
       });
 
       console.log("Assign Delivery Response:", response.data);

@@ -3,61 +3,35 @@ import axios from "axios";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import "./Drivers.css";
-
-const USE_DUMMY_DATA = true;
-
-const initialDrivers = [
-  {
-    delivery_id: 1,
-    full_name: "محمد علي",
-    phone: "0999999999",
-    vehicle_type: "دراجة نارية",
-    vehicle_number: "ABC-123",
-    availability_status: "available",
-  },
-  {
-    delivery_id: 2,
-    full_name: "أحمد خالد",
-    phone: "0988888888",
-    vehicle_type: "سيارة",
-    vehicle_number: "XYZ-456",
-    availability_status: "unavailable",
-  },
-  {
-    delivery_id: 3,
-    full_name: "سامر حسن",
-    phone: "0966778899",
-    vehicle_type: "دراجة نارية",
-    vehicle_number: "MTR-789",
-    availability_status: "available",
-  },
-];
+import api from "../../api/axiosInstance";
+import toast from "react-hot-toast";
+import Loading from "../Loading/Loading";
 
 const Drivers = () => {
   const navigate = useNavigate();
-
-  const [drivers, setDrivers] = useState(USE_DUMMY_DATA ? initialDrivers : []);
-
+  const [loading, setLoading] = useState(true);
+  const [drivers, setDrivers] = useState([]);
   const [editingId, setEditingId] = useState(null);
 
   const [editions, setEditions] = useState({
-    full_name: "",
+    name: "",
     phone: "",
     vehicle_type: "",
     vehicle_number: "",
-    availability_status: "",
+    is_available: "",
   });
 
   useEffect(() => {
-    if (USE_DUMMY_DATA) return;
-
     const fetchDrivers = async () => {
       try {
-        const response = await axios.get("YOUR_API_URL/deliveries");
-
-        setDrivers(response.data);
+        setLoading(true);
+        const response = await api.get("/deliveries");
+        console.log("Drivers:", response.data.data);
+        setDrivers(response.data.data);
       } catch (error) {
         console.error("Error fetching drivers:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -69,46 +43,45 @@ const Drivers = () => {
   };
 
   const editDriver = (driver) => {
-    setEditingId(driver.delivery_id);
+    setEditingId(driver.id);
 
     setEditions({
-      full_name: driver.full_name,
+      name: driver.name,
       phone: driver.phone,
       vehicle_type: driver.vehicle_type,
       vehicle_number: driver.vehicle_number,
-      availability_status: driver.is_available,
+      is_available: driver.is_available,
     });
   };
 
   const saveEdit = async (id) => {
-    if (USE_DUMMY_DATA) {
-      setDrivers((prevDrivers) =>
-        prevDrivers.map((driver) =>
-          driver.delivery_id === id
-            ? {
-                ...driver,
-                ...editions,
-              }
-            : driver,
-        ),
-      );
-
-      setEditingId(null);
-
-      return;
-    }
 
     try {
-      const response = await axios.patch(
-        `YOUR_API_URL/deliveries/${id}`,
-        editions,
+      const response = await api.put(
+        `/deliveries/${id}`,
+        {
+        name: editions.name,
+        phone: editions.phone,
+        vehicle_type: editions.vehicle_type,
+        vehicle_number: editions.vehicle_number,
+        is_available: editions.is_available,
+      }
       );
+      console.log("Update driver:", response.data);
+
+    const updatedDriver =
+      response.data.data ?? response.data;
 
       setDrivers((prevDrivers) =>
         prevDrivers.map((driver) =>
-          driver.delivery_id === id ? response.data : driver,
+          driver.id === id ? updatedDriver : driver,
         ),
+        console.log(updatedDriver)
       );
+       toast.success(
+      response.data.message ||
+      "تم تعديل بيانات المندوب بنجاح"
+    );
 
       setEditingId(null);
     } catch (error) {
@@ -120,14 +93,16 @@ const Drivers = () => {
     setEditingId(null);
 
     setEditions({
-      full_name: "",
+      name: "",
       phone: "",
       vehicle_type: "",
       vehicle_number: "",
-      availability_status: "",
+      is_available: "",
     });
   };
-
+  if (loading) {
+    return <Loading text="جاري تحميل مندوبو التوصيل..." />;
+  }
   return (
     <div className="drv-div">
       <div className="drv-header">
@@ -158,28 +133,28 @@ const Drivers = () => {
 
           <tbody>
             {drivers.map((driver) => (
-              <tr key={driver.delivery_id}>
-                <td>{driver.delivery_id}</td>
+              <tr key={driver.id}>
+                <td>{driver.id}</td>
 
                 <td>
-                  {editingId === driver.delivery_id ? (
+                  {editingId === driver.id ? (
                     <input
                       type="text"
-                      value={editions.full_name}
+                      value={editions.name}
                       onChange={(e) =>
                         setEditions({
                           ...editions,
-                          full_name: e.target.value,
+                          name: e.target.value,
                         })
                       }
                     />
                   ) : (
-                    driver.full_name
+                    driver.name
                   )}
                 </td>
 
                 <td>
-                  {editingId === driver.delivery_id ? (
+                  {editingId === driver.id ? (
                     <input
                       type="text"
                       value={editions.phone}
@@ -196,7 +171,7 @@ const Drivers = () => {
                 </td>
 
                 <td>
-                  {editingId === driver.delivery_id ? (
+                  {editingId === driver.id ? (
                     <input
                       type="text"
                       value={editions.vehicle_type}
@@ -213,7 +188,7 @@ const Drivers = () => {
                 </td>
 
                 <td>
-                  {editingId === driver.delivery_id ? (
+                  {editingId === driver.id ? (
                     <input
                       type="text"
                       value={editions.vehicle_number}
@@ -230,21 +205,21 @@ const Drivers = () => {
                 </td>
 
                 <td>
-                  {editingId === driver.delivery_id ? (
+                  {editingId === driver.id ? (
                     <select
-                      value={editions.availability_status}
+                      value={String(editions.is_available)}
                       onChange={(e) =>
                         setEditions({
                           ...editions,
-                          availability_status: e.target.value,
+                          is_available: e.target.value ==="true",
                         })
                       }
                     >
-                      <option value="available">متاح</option>
+                      <option value="true">متاح</option>
 
-                      <option value="unavailable">غير متاح</option>
+                      <option value="false">غير متاح</option>
                     </select>
-                  ) : driver.availability_status === "available" ? (
+                  ) : driver.is_available ? (
                     "متاح"
                   ) : (
                     "غير متاح"
@@ -252,16 +227,14 @@ const Drivers = () => {
                 </td>
 
                 <td>
-                  {editingId === driver.delivery_id ? (
+                  {editingId === driver.id ? (
                     <>
                       <button
                         className="save-edit"
-                        onClick={() => saveEdit(driver.delivery_id)}
+                        onClick={() => saveEdit(driver.id)}
                       >
                         حفظ
                       </button>
-
-                      
                     </>
                   ) : (
                     <button
