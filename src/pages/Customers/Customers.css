@@ -86,3 +86,14 @@
     background-color: #fff0b8;
     color: #d3a000;
 }
+.inactive-customer-row {
+  opacity: 0.45;
+  background-color: #f1f3f5;
+}
+.inactive-customer-row td {
+  color: #8a8f98;
+}
+.delete-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
