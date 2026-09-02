@@ -55,33 +55,26 @@ const Drivers = () => {
   };
 
   const saveEdit = async (id) => {
-
     try {
-      const response = await api.put(
-        `/deliveries/${id}`,
-        {
+      const response = await api.put(`/deliveries/${id}`, {
         name: editions.name,
         phone: editions.phone,
         vehicle_type: editions.vehicle_type,
         vehicle_number: editions.vehicle_number,
         is_available: editions.is_available,
-      }
-      );
+      });
       console.log("Update driver:", response.data);
 
-    const updatedDriver =
-      response.data.data ?? response.data;
+      const updatedDriver = response.data.data ?? response.data;
 
-      setDrivers((prevDrivers) =>
-        prevDrivers.map((driver) =>
-          driver.id === id ? updatedDriver : driver,
-        ),
-        console.log(updatedDriver)
+      setDrivers(
+        (prevDrivers) =>
+          prevDrivers.map((driver) =>
+            driver.id === id ? updatedDriver : driver,
+          ),
+        console.log(updatedDriver),
       );
-       toast.success(
-      response.data.message ||
-      "تم تعديل بيانات المندوب بنجاح"
-    );
+      toast.success(response.data.message || "تم تعديل بيانات المندوب بنجاح");
 
       setEditingId(null);
     } catch (error) {
@@ -211,7 +204,7 @@ const Drivers = () => {
                       onChange={(e) =>
                         setEditions({
                           ...editions,
-                          is_available: e.target.value ==="true",
+                          is_available: e.target.value === "true",
                         })
                       }
                     >

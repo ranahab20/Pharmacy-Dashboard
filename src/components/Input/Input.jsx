@@ -9,7 +9,7 @@ const Input = ({type,placeholder,id,name,value,onChange,minLength}) => {
     name={name}
     value={value}
     onChange={onChange}
-    minLength={8}
+    minLength={minLength}
    />
    </>
   )

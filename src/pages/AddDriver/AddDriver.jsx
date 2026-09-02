@@ -4,9 +4,12 @@ import Input from "../../components/Input/Input";
 import { FaChevronLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "./AddDriver.css";
+import toast from "react-hot-toast";
+import api from "../../api/axiosInstance";
 
-const initialFormData = {
-  full_name: "",
+
+const initialDriverData = {
+  name: "",
   phone: "",
   vehicle_type: "",
   vehicle_number: "",
@@ -15,7 +18,7 @@ const initialFormData = {
 const AddDriver = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState(initialFormData);
+  const [DriverData, setDriverData] = useState(initialDriverData);
 
   const backToDrivers = () => {
     navigate("/Pharmacy/home/drivers");
@@ -24,26 +27,34 @@ const AddDriver = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prev) => ({
+    setDriverData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
 
-    console.log("Driver data:", formData);
+    try {
+      const response = await api.post("/deliveries", DriverData);
 
-    // لاحقاً عند الربط مع Backend:
-    // await axios.post("API_URL/deliveries", formData);
+      console.log("Add driver:", response.data.data);
 
-    // مؤقتاً بعد الحفظ نفرغ الحقول
-    setFormData(initialFormData);
+      toast.success(response.data.message || "تمت إضافة المندوب بنجاح");
+
+      setDriverData(initialDriverData);
+
+      navigate("/Pharmacy/home/drivers");
+    } catch (error) {
+      console.error("Error adding driver:", error);
+
+      toast.error(error.response?.data?.message || "تعذر إضافة المندوب");
+    }
   };
 
   const cancelHandler = () => {
-    setFormData(initialFormData);
+    setDriverData(initialDriverData);
   };
 
   return (
@@ -66,9 +77,9 @@ const AddDriver = () => {
           <Input
             type="text"
             id="driverName"
-            name="full_name"
+            name="name"
             placeholder="أدخل اسم المندوب"
-            value={formData.full_name}
+            value={DriverData.name}
             onChange={handleChange}
           />
 
@@ -79,7 +90,7 @@ const AddDriver = () => {
             id="driverPhone"
             name="phone"
             placeholder="أدخل رقم الهاتف"
-            value={formData.phone}
+            value={DriverData.phone}
             onChange={handleChange}
           />
 
@@ -90,7 +101,7 @@ const AddDriver = () => {
             id="vehicleType"
             name="vehicle_type"
             placeholder="أدخل نوع المركبة"
-            value={formData.vehicle_type}
+            value={DriverData.vehicle_type}
             onChange={handleChange}
           />
 
@@ -101,7 +112,7 @@ const AddDriver = () => {
             id="vehicleNumber"
             name="vehicle_number"
             placeholder="أدخل رقم المركبة"
-            value={formData.vehicle_number}
+            value={DriverData.vehicle_number}
             onChange={handleChange}
           />
         </div>

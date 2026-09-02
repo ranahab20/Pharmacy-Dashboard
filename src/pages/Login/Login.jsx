@@ -107,6 +107,7 @@ const Login = () => {
                   name="password"
                   onChange={inputHandler}
                   value={user.password}
+                  minLength={8}
                   required
                 />
                 <span className="login-eye" onClick={toggleHandler}>
