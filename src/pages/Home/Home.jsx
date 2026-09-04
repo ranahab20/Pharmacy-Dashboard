@@ -35,6 +35,7 @@ const Home = () => {
         setLoading(true);
         const response = await api.get("/dashboard");
         console.log("Cards", response.data);
+        console.log("Sales last 7 days:", response.data.sales_last_7_days);
         setDashboardData(response.data);
       } catch (error) {
         console.error("Error fetching dashboard:", error);

@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import Loading from "../Loading/Loading";
 
 const Categories = () => {
-  const[loading, setLoading]=useState(true);
+  const [loading, setLoading] = useState(true);
   const [categoryName, setCategoryName] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -35,11 +35,9 @@ const Categories = () => {
 
         setTotalCategories(response.data.total_categories);
         setTotalProducts(response.data.total_products);
-        
       } catch (error) {
         console.error("Error fetching categories:", error);
-      }finally
-      {
+      } finally {
         setLoading(false);
       }
     };
@@ -99,7 +97,12 @@ const Categories = () => {
 
       setCategories((prevCategories) =>
         prevCategories.map((category) =>
-          category.id === id ? updatedCategory : category,
+          category.id === id
+            ? {
+                ...category,
+                name: editions.name,
+              }
+            : category,
         ),
       );
 
@@ -151,9 +154,9 @@ const Categories = () => {
       toast.error(error.response?.data?.message);
     }
   };
-if (loading) {
-  return <Loading text="جاري تحميل التصنيفات..." />;
-}
+  if (loading) {
+    return <Loading text="جاري تحميل التصنيفات..." />;
+  }
   return (
     <div className="ctg-div">
       <div className="ctg-header">

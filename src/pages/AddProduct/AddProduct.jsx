@@ -114,6 +114,7 @@ const AddProduct = () => {
   };
   const cancelHandler = () => {
     setFormData(initialFormData);
+    navigate("/Pharmacy/home/products");
   };
   return (
     <>

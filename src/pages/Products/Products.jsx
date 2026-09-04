@@ -52,7 +52,7 @@ const Products = () => {
         setLoading(true);
       }
 
-      const response = await api.get("/products?category_id=1");
+      const response = await api.get("/products");
 
       console.log("Products response:", response.data);
 
@@ -70,7 +70,7 @@ const Products = () => {
     }
   };
 
-   const deleteCat = async (id) => {
+  const deleteCat = async (id) => {
     try {
       const response = await api.delete(`/products/${id}`);
       console.log("Delete response:", response.data);
@@ -87,11 +87,9 @@ const Products = () => {
     fetchProducts();
   }, []);
 
-
   const addHandler = () => {
     navigate("/Pharmacy/home/addProduct");
   };
-
 
   const handleEditChange = (e) => {
     const { name, value, type, checked } = e.target;
