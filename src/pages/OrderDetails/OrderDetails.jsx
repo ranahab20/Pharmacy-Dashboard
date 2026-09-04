@@ -25,7 +25,6 @@ const OrderDetails = () => {
 
   const navigate = useNavigate();
 
-
   const [order, setOrder] = useState(null);
   const [drivers, setDrivers] = useState([]);
   const [selectedDriver, setSelectedDriver] = useState("");
@@ -124,7 +123,6 @@ const OrderDetails = () => {
 
     fetchDrivers();
   }, []);
-
 
   const backToOrders = () => {
     navigate("/Pharmacy/home/orders");
@@ -375,18 +373,9 @@ const OrderDetails = () => {
      هل يمكن بدء التوصيل؟
   ========================================= */
 
-  /*
-    بدون وصفة:
-    pending + تم اختيار سائق
+  
 
-    مع وصفة:
-    accepted + تم اختيار سائق
-  */
-
-  const canStartDelivery =
-    driverReady &&
-    ((!hasPrescription && order.status === "pending") ||
-      (hasPrescription && order.status === "accepted"));
+  const canStartDelivery = driverReady && order.status === "accepted";
 
   /* =========================================
      UI
@@ -626,6 +615,8 @@ const OrderDetails = () => {
           </div>
         </div>
 
+        {/* الوصفة تظهر فقط إذا كانت موجودة */}
+
         {hasPrescription && (
           <div className="prescription-review">
             <h3>مراجعة الوصفة الطبية</h3>
@@ -638,27 +629,29 @@ const OrderDetails = () => {
                   className="prescription-image"
                 />
               )}
-
-              {order.status === "pending" && (
-                <div className="prescription-actions">
-                  <button
-                    className="accept-order-btn"
-                    onClick={acceptOrder}
-                    disabled={updating}
-                  >
-                    قبول الطلب
-                  </button>
-
-                  <button
-                    className="reject-order-btn"
-                    onClick={openRejectModal}
-                    disabled={updating}
-                  >
-                    رفض الطلب
-                  </button>
-                </div>
-              )}
             </div>
+          </div>
+        )}
+
+        {/* قبول ورفض يظهران لكل طلب pending */}
+
+        {order.status === "pending" && (
+          <div className="prescription-actions">
+            <button
+              className="accept-order-btn"
+              onClick={acceptOrder}
+              disabled={updating}
+            >
+              {updating ? "جاري التنفيذ..." : "قبول الطلب"}
+            </button>
+
+            <button
+              className="reject-order-btn"
+              onClick={openRejectModal}
+              disabled={updating}
+            >
+              رفض الطلب
+            </button>
           </div>
         )}
       </div>

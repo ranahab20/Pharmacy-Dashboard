@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./Orders.css";
 import { IoEyeOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
@@ -33,37 +33,35 @@ const getStatusLabel = (status) => {
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
-  const[loading,setLoading]=useState(true)
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const viewOrder = (orderId) => {
     navigate(`/Pharmacy/home/orders/${orderId}`);
   };
 
-    useEffect(() => {
-      const fetchOrders = async () => {
-        try {
-          setLoading(true);
-          const response = await api.get("/orders");
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get("/orders");
 
-          console.log("Orders:", response.data);
+        console.log("Orders:", response.data);
 
-          setOrders(response.data.data);
+        setOrders(response.data.data);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        } catch (error) {
-          console.error("Error fetching orders:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchOrders();
-    }, []);
-  
+    fetchOrders();
+  }, []);
 
   if (loading) {
-  return <Loading text="جاري تحميل الطلبات..." />;
-}
+    return <Loading text="جاري تحميل الطلبات..." />;
+  }
 
   return (
     <div className="ord-div">
@@ -94,9 +92,17 @@ const Orders = () => {
 
                 <td>{order.user?.name}</td>
 
-                <td>{order.assigned_at}</td>
+                <td>
+                  {order.created_at
+                    ? new Date(order.created_at).toLocaleDateString("ar")
+                    : "-"}
+                </td>
 
-                <td>{order.delivered_at || "-"}</td>
+                <td>
+                  {order.delivered_at
+                    ? new Date(order.delivered_at).toLocaleDateString("ar")
+                    : "-"}
+                </td>
 
                 <td>{order.total_price}</td>
 
