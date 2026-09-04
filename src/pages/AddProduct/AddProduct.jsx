@@ -71,19 +71,27 @@ const AddProduct = () => {
       );
 
       data.append("description", formData.description);
-      data.append("indications", formData.indications);
-      data.append("usage_method", formData.usage_method);
-      data.append("side_effects", formData.side_effects);
-      data.append("warnings", formData.warnings);
+
+      // تفاصيل المنتج
+      data.append("details[0][type]", "usage_method");
+      data.append("details[0][content]", formData.usage_method);
+
+      data.append("details[1][type]", "indications");
+      data.append("details[1][content]", formData.indications);
+
+      data.append("details[2][type]", "side_effects");
+      data.append("details[2][content]", formData.side_effects);
+
+      data.append("details[3][type]", "warnings");
+      data.append("details[3][content]", formData.warnings);
 
       if (formData.image) {
         data.append("image", formData.image);
       }
-      for (const [key, value] of data.entries()) {
-  console.log(key, value);
-}
 
-      console.log("Form data before send:", formData);
+      for (const [key, value] of data.entries()) {
+        console.log(key, value);
+      }
 
       const response = await api.post("/products", data);
 
